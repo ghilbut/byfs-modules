@@ -11,12 +11,12 @@ resource aws_s3_bucket web {
   acl           = "private"
   force_destroy = true
 
-  tags = "${merge(
+  tags = merge(
     map(
       "Name",  var.domain_name,
     ),
-    local.tags, 
-  )}"
+    local.tags,
+  )
 }
 
 resource aws_s3_bucket_policy web {

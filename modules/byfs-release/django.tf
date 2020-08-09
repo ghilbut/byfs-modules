@@ -176,24 +176,24 @@ locals {
 
   secrets = [
     {
-      "name": "${upper(var.prefix)}_DB_HOST",
-      "valueFrom": var.mysql_host.arn
+      name: "${upper(var.prefix)}_DB_HOST",
+      valueFrom: var.mysql_host.arn
     },
     {
-      "name": "${upper(var.prefix)}_DB_PORT",
-      "valueFrom": var.mysql_port.arn
+      name: "${upper(var.prefix)}_DB_PORT",
+      valueFrom: var.mysql_port.arn
     },
     {
-      "name": "${upper(var.prefix)}_DB_NAME",
-      "valueFrom": var.mysql_database.arn
+      name: "${upper(var.prefix)}_DB_NAME",
+      valueFrom: var.mysql_database.arn
     },
     {
-      "name": "${upper(var.prefix)}_DB_USER",
-      "valueFrom": var.mysql_username.arn
+      name: "${upper(var.prefix)}_DB_USER",
+      valueFrom: var.mysql_username.arn
     },
     {
-      "name": "${upper(var.prefix)}_DB_PASSWORD",
-      "valueFrom": var.mysql_password.arn
+      name: "${upper(var.prefix)}_DB_PASSWORD",
+      valueFrom: var.mysql_password.arn
     }
   ]
 }

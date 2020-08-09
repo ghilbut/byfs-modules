@@ -14,6 +14,18 @@ variable unique_name {
   type = string
 }
 
+variable root_domain {
+  type = string
+}
+
+variable alb_public_domains {
+  type = list(string)
+}
+
+variable alb_private_domains {
+  type = list(string)
+}
+
 variable cluster_name {
   type = string
 }
