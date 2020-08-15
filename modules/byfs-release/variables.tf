@@ -1,13 +1,13 @@
-variable aws_region {
-  type    = string
+variable unique_name {
+  type = string
 }
 
 variable aws_profile {
   type    = string
 }
 
-variable prefix {
-  type = string
+variable aws_region {
+  type    = string
 }
 
 variable tags {
@@ -16,65 +16,26 @@ variable tags {
 }
 
 ##--------------------------------------------------------------
-##  Domain
+##  VPC
 
-variable domain_root {
-  type        = string
-  description = "Root domain name"
+variable vpc {
+  type = object({
+    id = string
+  })
+  description = "AWS VPC came from byfs-common"
 }
-
-variable domain_name {
-  type        = string
-  description = "Service domain name"
-}
-
-
-################################################################
-##
-##  byfs:common
-##
 
 ##--------------------------------------------------------------
 ##  MySQL
 
-variable mysql_host {
-  type = object({
-    arn   = string
-    value = string
-  })
-  description = "MySQL address"
-}
-
-variable mysql_port {
-  type = object({
-    arn   = string
-    value = string
-  })
-  description = "MySQL port"
+variable mysql_instance {
+  type = string
+  description = "AWS RDS MySQL instance type"
 }
 
 variable mysql_database {
-  type = object({
-    arn   = string
-    value = string
-  })
-  description = "MySQL database name"
-}
-
-variable mysql_username {
-  type = object({
-    arn   = string
-    value = string
-  })
-  description = "MySQL username"
-}
-
-variable mysql_password {
-  type = object({
-    arn   = string
-    value = string
-  })
-  description = "MySQL password"
+  type = string
+  description = "AWS RDS MySQL default database name"
 }
 
 ##--------------------------------------------------------------
@@ -87,41 +48,3 @@ variable ecs_cluster {
   })
   description = "AWS ECS cluster"
 }
-
-
-
-
-
-
-
-
-
-
-##--------------------------------------------------------------
-##  Django
-
-variable django_max_capacity {
-  type    = number
-  default = 1
-}
-
-variable django_min_capacity {
-  type    = number
-  default = 1
-}
-
-variable django_scale_out_cpu_high {
-  type        = number
-  default     = 80
-  description = "CPU hight threshold percent for scale-out"
-}
-
-variable django_scale_in_cpu_low {
-  type    = number
-  default = 30
-  description = "CPU low threshold percent for scale-in"
-}
-
-##--------------------------------------------------------------
-##  Vue.js
-
