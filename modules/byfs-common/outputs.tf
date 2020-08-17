@@ -44,6 +44,24 @@ output alb_public {
   description = "AWS Application Load Balancer to allow public inbound"
 }
 
+output nlb_private {
+  value = {
+    arn = aws_lb.nlb_private.arn
+    dns_name = aws_lb.nlb_private.dns_name
+    zone_id = aws_lb.nlb_private.zone_id
+  }
+  description = "AWS Network Load Balancer to deny public inbound"
+}
+
+output nlb_public {
+  value = {
+    arn = aws_lb.nlb_public.arn
+    dns_name = aws_lb.nlb_public.dns_name
+    zone_id = aws_lb.nlb_public.zone_id
+  }
+  description = "AWS Network Load Balancer to allow public inbound"
+}
+
 output alb_listener_private {
   value = {
     arn = aws_lb_listener.http_private.arn

@@ -19,7 +19,7 @@ locals {
     {
       created_by = "terraform"
       "terraform:byfs:prefix" = var.unique_name
-      "terraform:byfs:module" = "byfs-production"
+      "terraform:byfs:module" = "byfs-devleop"
     }
   )
 }

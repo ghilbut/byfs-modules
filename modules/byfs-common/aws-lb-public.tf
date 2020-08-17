@@ -1,6 +1,6 @@
 ################################################################
 ##
-##  AWS LB Public
+##  AWS Application Load Balancer for public
 ##
 
 data aws_route53_zone public {
@@ -106,4 +106,26 @@ resource aws_lb_listener https_public {
       status_code  = "404"
     }
   }
+}
+
+
+################################################################
+##
+##  AWS Network Load Balancer for public
+##
+
+resource aws_lb nlb_public {
+  name               = "nlb-${var.unique_name}-public"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet.defaults.*.id
+
+  enable_deletion_protection = false
+
+  tags = merge(
+    map(
+      "Name", "nlb-${var.unique_name}-public",
+    ),
+    local.tags,
+  )
 }

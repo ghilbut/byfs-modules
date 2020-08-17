@@ -1,6 +1,6 @@
 ################################################################
 ##
-##  AWS LB Private
+##  AWS Application Load Balancer for private
 ##
 
 data aws_route53_zone private {
@@ -40,4 +40,26 @@ resource aws_lb_listener http_private {
       status_code  = "404"
     }
   }
+}
+
+
+################################################################
+##
+##  AWS Network Load Balancer for private
+##
+
+resource aws_lb nlb_private {
+  name               = "nlb-${var.unique_name}-private"
+  internal           = true
+  load_balancer_type = "network"
+  subnets            = data.aws_subnet.defaults.*.id
+
+  enable_deletion_protection = false
+
+  tags = merge(
+    map(
+      "Name", "nlb-${var.unique_name}-private",
+    ),
+    local.tags,
+  )
 }
