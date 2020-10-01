@@ -3,19 +3,25 @@
 ##  MySQL 5.7
 ##
 
+locals {
+  mysql_name = "${var.unique_name}-mysql-production"
+  mysql_database = "production"
+}
+
 ##--------------------------------------------------------------
-##  Security Group
+##  aws security group for mysql
 
 resource aws_security_group mysql {
-  name = var.mysql_name
-  description = "Allow MySQL inbound traffic"
+  name        = local.mysql_name
+  description = "Allow MySQL traffic for production"
+  vpc_id      = var.vpc.id
 
   ingress {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0",
+      "0.0.0.0/0",  # TODO(ghilbut): remove
       "10.0.0.0/8",
       "172.16.0.0/12",
       "192.168.0.0/16",
@@ -27,15 +33,18 @@ resource aws_security_group mysql {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = [
-      "0.0.0.0/0",
+      "0.0.0.0/0",  # TODO(ghilbut): remove
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
     ]
   }
 
   tags = merge(
     map(
-      "Name",  "sg-${var.mysql_name}",
+      "Name", "sg-${local.mysql_name}",
     ),
-    local.tags, 
+    local.tags,
   )
 }
 
@@ -43,7 +52,7 @@ resource aws_security_group mysql {
 ##  Parameter Group
 
 resource aws_db_parameter_group mysql {
-  name   = var.mysql_name
+  name   = local.mysql_name
   family = "mysql5.7"
 
   parameter {
@@ -73,7 +82,7 @@ resource aws_db_parameter_group mysql {
 
   tags = merge(
     map(
-      "Name",  "pg-${var.mysql_name}",
+      "Name",  "pg-${local.mysql_name}",
     ),
     local.tags, 
   )
@@ -81,13 +90,6 @@ resource aws_db_parameter_group mysql {
 
 ##--------------------------------------------------------------
 ##  MySQL
-
-resource random_string mysql_database {
-  length  = 8
-  upper   = false
-  number  = false
-  special = false
-}
 
 resource random_string mysql_username {
   length  = 8
@@ -110,12 +112,12 @@ resource aws_db_instance mysql {
   engine                = "mysql"
   engine_version        = "5.7"
   instance_class        = var.mysql_instance
-  name                  = random_string.mysql_database.result
+  name                  = local.mysql_database
   username              = random_string.mysql_username.result
   password              = random_password.mysql_password.result
   parameter_group_name  = aws_db_parameter_group.mysql.id
 
-  identifier = "rds-${var.mysql_name}"
+  identifier = "rds-${local.mysql_name}"
 
   skip_final_snapshot = true
   publicly_accessible = true
@@ -126,7 +128,7 @@ resource aws_db_instance mysql {
 
   tags = merge(
     map(
-      "Name", "rds-${var.mysql_name}",
+      "Name", "rds-${local.mysql_name}",
     ),
     local.tags, 
   )
@@ -140,49 +142,10 @@ resource aws_db_instance mysql {
 ##
 
 ##--------------------------------------------------------------
-##  host
-
-resource aws_secretsmanager_secret mysql_host {
-  name = "${var.mysql_name}-host"
-  recovery_window_in_days = 0
-}
-
-resource aws_secretsmanager_secret_version mysql_host {
-  secret_id     = aws_secretsmanager_secret.mysql_host.id
-  secret_string = aws_db_instance.mysql.address
-}
-
-##--------------------------------------------------------------
-##  port
-
-resource aws_secretsmanager_secret mysql_port {
-  name = "${var.mysql_name}-port"
-  recovery_window_in_days = 0
-}
-
-resource aws_secretsmanager_secret_version mysql_port {
-  secret_id     = aws_secretsmanager_secret.mysql_port.id
-  secret_string = aws_db_instance.mysql.port
-}
-
-##--------------------------------------------------------------
-##  database
-
-resource aws_secretsmanager_secret mysql_database {
-  name = "${var.mysql_name}-database"
-  recovery_window_in_days = 0
-}
-
-resource aws_secretsmanager_secret_version mysql_databse {
-  secret_id     = aws_secretsmanager_secret.mysql_database.id
-  secret_string = random_string.mysql_database.result
-}
-
-##--------------------------------------------------------------
 ##  username
 
 resource aws_secretsmanager_secret mysql_username {
-  name = "${var.mysql_name}-username"
+  name = "${local.mysql_name}-username"
   recovery_window_in_days = 0
 }
 
@@ -195,7 +158,7 @@ resource aws_secretsmanager_secret_version mysql_username {
 ##  password
 
 resource aws_secretsmanager_secret mysql_password {
-  name = "${var.mysql_name}-password"
+  name = "${local.mysql_name}-password"
   recovery_window_in_days = 0
 }
 

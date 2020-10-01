@@ -32,3 +32,6 @@ override.tf.json
 
 # vim
 *.sw?
+
+# JetBrains
+.idea

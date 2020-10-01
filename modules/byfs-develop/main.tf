@@ -14,19 +14,12 @@ locals {
     "192.168.0.0/16",
   ]
 
-  django_container_name = "${var.prefix}-django"
-  django_cpu            = "256"
-  django_memory         = "512"
-  django_port           = 8000
-
-  alb_django_priority = 50000
-
   tags = merge(
     var.tags,
     {
       created_by = "terraform"
-      "terraform:byfs:prefix" = var.prefix
-      "terraform:byfs:module" = "byfs-release"
+      "terraform:byfs:prefix" = var.unique_name
+      "terraform:byfs:module" = "byfs-devleop"
     }
   )
 }
