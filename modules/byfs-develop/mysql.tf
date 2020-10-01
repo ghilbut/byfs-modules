@@ -10,25 +10,6 @@ provider mysql {
 }
 
 ##--------------------------------------------------------------
-##  username
-
-resource aws_secretsmanager_secret mysql_username {
-  name = "byfs-${var.unique_name}-${terraform.workspace}-mysql-username"
-  recovery_window_in_days = 0
-}
-
-resource random_string mysql_username {
-  length  = 8
-  number  = false
-  special = false
-}
-
-resource aws_secretsmanager_secret_version mysql_username {
-  secret_id     = aws_secretsmanager_secret.mysql_username.id
-  secret_string = random_string.mysql_username.result
-}
-
-##--------------------------------------------------------------
 ##  password
 
 resource aws_secretsmanager_secret mysql_password {
@@ -56,7 +37,7 @@ resource mysql_database default {
 }
 
 resource mysql_user default {
-  user               = random_string.mysql_username.result
+  user               = terraform.workspace
   host               = "%"
   plaintext_password = random_password.mysql_password.result
 }

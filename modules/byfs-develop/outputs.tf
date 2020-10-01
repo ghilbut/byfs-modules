@@ -10,11 +10,8 @@ output mysql_database {
   value = terraform.workspace
 }
 
-output mysql_username_secret {
-  value = {
-    arn = aws_secretsmanager_secret.mysql_username.arn
-    value = random_string.mysql_username.result
-  }
+output mysql_username {
+  value = terraform.workspace
 }
 
 output mysql_password_secret {
@@ -22,4 +19,5 @@ output mysql_password_secret {
     arn = aws_secretsmanager_secret.mysql_password.arn
     value = random_password.mysql_password.result
   }
+  sensitive = true
 }
