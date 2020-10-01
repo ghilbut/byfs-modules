@@ -1,0 +1,39 @@
+---
+server:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+    - host: ""
+      paths:
+      - /
+    tls:
+    - hosts: []
+      secretName: drone-tls
+  env:
+    ## Ref: https://docs.drone.io/installation/providers/github/
+    DRONE_GITHUB_CLIENT_ID: bf3589b369b96b5a4fbc
+    DRONE_GITHUB_CLIENT_SECRET: 0dac9e6a1b294a908e9c039d8a43231ce2cda7d1
+    ## Ref: https://docs.drone.io/server/reference/
+    DRONE_RPC_SECRET: qwerty
+    DRONE_SERVER_HOST: drone
+    DRONE_SERVER_PROTO: http
+    DRONE_SERVER_PROXY_HOST: drone.ghilbut.net
+    DRONE_SERVER_PROXY_PROTO: http
+
+runner:
+  env:
+    DRONE_RPC_SECRET: qwerty
+    DRONE_NAMESPACE_DEFAULT: {{ .Release.Namespace }}
+    DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
+    DRONE_SECRET_PLUGIN_TOKEN: your-shared-secret-value-here
+
+secrets:
+  rbac:
+    secretNamespace: {{ .Release.Namespace }}
+  env:
+    SECRET_KEY: your-shared-secret-value-here
+    KUBERNETES_NAMESPACE: {{ .Release.Namespace }}

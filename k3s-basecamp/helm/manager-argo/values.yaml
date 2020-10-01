@@ -1,0 +1,46 @@
+---
+cd:
+  installCRDs: false
+  server:
+    extraArgs:
+    - --insecure
+    ingress:
+      enabled: true
+      annotations:
+        #cert-manager.io/cluster-issuer: letsencrypt
+        kubernetes.io/ingress.class: nginx
+        #kubernetes.io/tls-acme: "true"
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      hosts: []
+      paths:
+      - /
+      extraPaths:
+      - path: /api/dex/*
+        backend:
+          serviceName: manager-argo-argocd-dex-server
+          servicePort: 5556
+      #tls:
+      #- hosts: []
+      #  secretName: manager-argo-tls
+    config:
+      url: ""
+      repositories: |
+        - url: https://github.com/ghilbut/byfx-modules.git
+      rbacConfig: |
+        ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
+        policy.default: "role:readonly"
+        policy.csv: ""
+      dex.config: |
+        connectors:
+        - type: github
+          id:   github
+          name: GitHub
+          config:
+            clientID: $dex.github.clientID
+            clientSecret: $dex.github.clientSecret
+  configs:
+    secret:
+      #argocdServerAdminPassword: $2y$10$Ue0JDP8qERtKnozZf9ryF.9irE0Fun.c1QP3GHnI80N0XGXdX9m6m
+      extra:
+        dex.github.clientID: ""
+        dex.github.clientSecret: ""

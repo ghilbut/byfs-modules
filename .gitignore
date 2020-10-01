@@ -31,7 +31,11 @@ override.tf.json
 
 
 # vim
-*.sw?
+*.sw[o|p]
 
 # JetBrains
 .idea
+
+# helm
+k3s-basecamp/helm/**/Chart.lock
+k3s-basecamp/helm/**/charts
