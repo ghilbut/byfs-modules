@@ -26,9 +26,9 @@ cd:
       url: ""
       repositories: |
         - url: https://github.com/ghilbut/byfx-modules.git
+      ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
       rbacConfig: |
-        ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
-        policy.default: "role:readonly"
+        policy.default: role:readonly
         policy.csv: ""
       dex.config: |
         connectors:
@@ -38,9 +38,9 @@ cd:
           config:
             clientID: $dex.github.clientID
             clientSecret: $dex.github.clientSecret
-  configs:
-    secret:
-      #argocdServerAdminPassword: $2y$10$Ue0JDP8qERtKnozZf9ryF.9irE0Fun.c1QP3GHnI80N0XGXdX9m6m
-      extra:
-        dex.github.clientID: ""
-        dex.github.clientSecret: ""
+  #configs:
+  #  secret:
+  #    argocdServerAdminPassword: ""
+  #    extra:
+  #      dex.github.clientID: ""
+  #      dex.github.clientSecret: ""
