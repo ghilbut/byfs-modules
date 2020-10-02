@@ -3,15 +3,13 @@ kubernetes-dashboard:
   ingress:
     enabled: true
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
+      #cert-manager.io/cluster-issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      #kubernetes.io/tls-acme: "true"
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
     paths:
     - /
-    hosts:
-    - k8s.ghilbut.com
-    tls:
-    - hosts:
-      - k8s.ghilbut.com
-      secretName: kubernetes-dashboard-tls
+    hosts: []
+    #tls:
+    #- hosts: []
+    #  secretName: kubernetes-dashboard-tls
