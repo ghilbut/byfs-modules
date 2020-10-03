@@ -6,9 +6,9 @@ metadata:
 data:
   # https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
   mapRoles: |
-  - rolearn: {{ .Values.RoleARN }}
-    username: system:node:{{ .Values.EC2PrivateDNSName }}
-    groups:
-    - system:bootstrappers
-    - system:nodes
+    - rolearn: {{ .Values.RoleARN }}
+      username: system:node:{{ .Values.EC2PrivateDNSName }}
+      groups:
+      - system:bootstrappers
+      - system:nodes
 
