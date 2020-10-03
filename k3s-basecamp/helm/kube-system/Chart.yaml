@@ -1,0 +1,7 @@
+---
+apiVersion: v2
+name: kube-system
+description: Kubernetes system modules
+type: application
+version: 0.1.0
+appVersion: 1.16.0
