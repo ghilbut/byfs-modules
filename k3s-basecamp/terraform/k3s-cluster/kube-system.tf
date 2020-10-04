@@ -1,9 +1,10 @@
-resource null_resource kube_system2 {
+resource null_resource kube_system {
   depends_on = [
-    null_resource.k3s_cluster,
+    null_resource.manager_argo
   ]
   triggers = {
-    scripts = md5("${path.module}/scripts/install-kube-system-by-argo.sh"),
+    argoconfig = var.argoconfig
+    kubeconfig = var.kubeconfig
   }
 
   provisioner local-exec {
@@ -16,7 +17,6 @@ resource null_resource kube_system2 {
       kind: ConfigMap
       metadata:
         name: aws-auth
-        namespace: kube-system
       data:
         mapRoles: |
           - rolearn: ${aws_iam_role.basecamp.arn}
@@ -29,14 +29,36 @@ resource null_resource kube_system2 {
   }
 
   provisioner local-exec {
-    command     = "${path.module}/scripts/install-kube-system-by-argo.sh"
-    environment = {
-      CONFIG   = var.argoconfig
-      REVISION = "featrue/k3s-basecamp-terraform"
-      #REVISION = local.revision
-      ROLE_ARN = aws_iam_role.basecamp.arn
-      EC2_PRIVATE_DNS_NAME = aws_instance.basecamp.private_dns
-    }
+    command = <<-EOC
+      #!/bin/sh -eux
+      argocd --config ${var.argoconfig} \
+             --grpc-web \
+             --insecure \
+             app create kube-system \
+             --auto-prune \
+             --dest-namespace kube-system \
+             --dest-server https://kubernetes.default.svc \
+             --path k3s-basecamp/helm/kube-system \
+             --project default \
+             --repo https://github.com/ghilbut/byfs-modules.git \
+             --revision ${local.revision} \
+             --self-heal \
+             --sync-option Prune=true \
+             --sync-policy automated
+    EOC
   }
 
+  provisioner local-exec {
+    when    = destroy
+    command = <<-EOC
+      #!/bin/sh -eux
+      argocd --config ${self.triggers.argoconfig} \
+             --grpc-web \
+             --insecure \
+             app delete kube-system
+      kubectl --kubeconfig ${self.triggers.kubeconfig} \
+              --namespace kube-system \
+              delete configmap aws-auth
+    EOC
+  }
 }
