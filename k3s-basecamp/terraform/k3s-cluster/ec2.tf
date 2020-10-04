@@ -3,7 +3,7 @@
 ##  EC2
 ##
 
-resource aws_instance basecamp {
+resource aws_instance master {
   ami                                  = var.aws_ami
   associate_public_ip_address          = true
   availability_zone                    = "${var.aws_region}a"
@@ -121,7 +121,7 @@ resource aws_route53_record wildcard_private {
   name    = "*.${var.domain_name}"
   type    = "A"
   ttl     = "300"
-  records = [aws_instance.basecamp.private_ip]
+  records = [aws_instance.master.private_ip]
 }
 
 resource aws_route53_record wildcard_public {
@@ -129,7 +129,7 @@ resource aws_route53_record wildcard_public {
   name    = "*.${var.domain_name}"
   type    = "A"
   ttl     = "300"
-  records = [aws_instance.basecamp.public_ip]
+  records = [aws_instance.master.public_ip]
 }
 
 

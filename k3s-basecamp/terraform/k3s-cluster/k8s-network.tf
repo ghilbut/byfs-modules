@@ -10,7 +10,7 @@ resource null_resource k8s_network {
     command = <<-EOC
       #!/bin/sh -eux
       export CHART_PATH=${local.helmchart_path}/k8s-network/
-      export PRIVATE_IP=${aws_instance.basecamp.private_ip}
+      export PRIVATE_IP=${aws_instance.master.private_ip}
       helm dependency update $CHART_PATH
       helm --kubeconfig ${var.kubeconfig} \
            --namespace k8s-network \

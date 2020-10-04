@@ -20,7 +20,7 @@ resource null_resource kube_system {
       data:
         mapRoles: |
           - rolearn: ${aws_iam_role.basecamp.arn}
-            username: system:node:${aws_instance.basecamp.private_dns}
+            username: system:node:${aws_instance.master.private_dns}
             groups:
             - system:bootstrappers
             - system:nodes

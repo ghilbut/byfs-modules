@@ -10,7 +10,7 @@ resource null_resource k3s_cluster {
   # upload install script
   provisioner file {
     connection {
-      host        = aws_instance.basecamp.public_ip
+      host        = aws_instance.master.public_ip
       private_key = file(var.private_key_path)
       type        = "ssh"
       user        = "ubuntu"
@@ -39,7 +39,7 @@ resource null_resource k3s_cluster {
   # install k3s server
   provisioner remote-exec {
     connection {
-      host        = aws_instance.basecamp.public_ip
+      host        = aws_instance.master.public_ip
       private_key = file(var.private_key_path)
       type        = "ssh"
       user        = "ubuntu"
@@ -62,7 +62,7 @@ resource null_resource k3s_cluster {
           -o StrictHostKeyChecking=no \
           -o UserKnownHostsFile=/dev/null \
           -q \
-          ubuntu@${aws_instance.basecamp.public_ip}:/etc/rancher/k3s/k3s.yaml \
+          ubuntu@${aws_instance.master.public_ip}:/etc/rancher/k3s/k3s.yaml \
           ${dirname(var.kubeconfig)}
       sed -i -e "s/127\.0\.0\.1/${local.k3s_host}/g" ${var.kubeconfig}
     EOC
