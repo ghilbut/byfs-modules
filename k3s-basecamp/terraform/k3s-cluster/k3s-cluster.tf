@@ -7,22 +7,40 @@ resource null_resource k3s_cluster {
     aws_route53_record.wildcard_public,
   ]
 
+  # upload install script
   provisioner file {
     connection {
       host        = aws_instance.basecamp.public_ip
-      private_key = local.private_key
+      private_key = file(var.private_key_path)
       type        = "ssh"
       user        = "ubuntu"
     }
 
-    source      = "${path.module}/scripts/install-k3s-cluster.sh"
+    content = <<-EOC
+      #!/bin/sh -eux
+      export K3S_KUBECONFIG_MODE=400
+      export INSTALL_K3S_EXEC='
+         --disable-cloud-controller
+         --kube-apiserver-arg cloud-provider=external
+         --kube-apiserver-arg allow-privileged=true
+         --kube-apiserver-arg feature-gates=CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true,VolumeSnapshotDataSource=true
+         --kube-controller-arg cloud-provider=external
+         --kubelet-arg feature-gates=CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true
+         --no-deploy local-storage
+         --no-deploy servicelb
+         --no-deploy traefik
+         --token ${random_uuid.token.result}'
+      curl -sfL https://get.k3s.io | sh -
+      sudo chown ubuntu:ubuntu /etc/rancher/k3s/k3s.yaml
+    EOC
     destination = "/home/ubuntu/install-k3s-cluster.sh"
   }
 
+  # install k3s server
   provisioner remote-exec {
     connection {
       host        = aws_instance.basecamp.public_ip
-      private_key = local.private_key
+      private_key = file(var.private_key_path)
       type        = "ssh"
       user        = "ubuntu"
     }
@@ -30,17 +48,23 @@ resource null_resource k3s_cluster {
     inline = [
       "sudo apt update -y",
       "sudo apt upgrade -y",
-      "TOKEN=${random_uuid.token.result} sh /home/ubuntu/install-k3s-cluster.sh",
+      "sh /home/ubuntu/install-k3s-cluster.sh",
     ]
   }
 
+  # download kubernetes context file
   provisioner local-exec {
     command = <<-EOC
-      ${path.module}/scripts/download-k8s-context.sh \
-        ${aws_instance.basecamp.public_ip} \
-        ${var.public_key_path} \
-        ${var.kubeconfig} \
-        k3s.${var.domain_name}
+      #!/bin/sh -eux
+      rm -rf ${dirname(var.kubeconfig)}
+      mkdir -p ${dirname(var.kubeconfig)}
+      scp -i ${var.private_key_path} \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          -q \
+          ubuntu@${aws_instance.basecamp.public_ip}:/etc/rancher/k3s/k3s.yaml \
+          ${dirname(var.kubeconfig)}
+      sed -i -e "s/127\.0\.0\.1/${local.k3s_host}/g" ${var.kubeconfig}
     EOC
   }
 }

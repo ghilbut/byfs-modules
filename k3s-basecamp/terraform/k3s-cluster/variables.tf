@@ -6,11 +6,11 @@ variable aws_ami {
   type = string
 }
 
-variable public_key_name {
+variable private_key_name {
   type = string
 }
 
-variable public_key_path {
+variable private_key_path {
   type = string
 }
 

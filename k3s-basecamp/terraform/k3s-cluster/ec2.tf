@@ -11,7 +11,7 @@ resource aws_instance basecamp {
   iam_instance_profile                 = aws_iam_instance_profile.basecamp.name
   instance_initiated_shutdown_behavior = "terminate"
   instance_type                        = "m5.large"
-  key_name                             = var.public_key_name
+  key_name                             = var.private_key_name
   root_block_device {
     delete_on_termination = true
     volume_type = "gp2"

@@ -4,41 +4,9 @@ resource random_password argo {
   override_special = "!@#$%^&*()"
 }
 
-resource null_resource manager_argo_namespace {
-  depends_on = [
-    null_resource.k3s_cluster,
-  ]
-  triggers = {
-    kubeconfig = var.kubeconfig
-  }
-
-  # create kubernetes namespace
-  provisioner local-exec {
-    command = <<-EOC
-      #!/bin/sh -eux
-      kubectl --kubeconfig ${var.kubeconfig} \
-           create namespace manager-argo
-    EOC
-  }
-
-  # delete kubernetes namespace when destroy
-  provisioner local-exec {
-    when    = destroy
-    command = <<-EOC
-      #!/bin/sh -eux
-      kubectl --kubeconfig ${self.triggers.kubeconfig} \
-           delete namespace manager-argo \
-           --all=true \
-           --grace-period=60 \
-    EOC
-  }
-}
-
 resource null_resource manager_argo {
   depends_on = [
-    null_resource.k3s_cluster,
     null_resource.k8s_network,
-    null_resource.manager_argo_namespace,
   ]
   triggers = {
     kubeconfig = var.kubeconfig
@@ -53,10 +21,10 @@ resource null_resource manager_argo {
       export MTIME=$(date -u +%FT%TZ)
       export GITHUB_ID=${var.argo_github_client_id}
       export GITHUB_SECRET=${var.argo_github_client_secret}
-
       helm --kubeconfig ${var.kubeconfig} \
            --namespace manager-argo \
            install manager-argo ${local.helmchart_path}/manager-argo/ \
+           --create-namespace \
            --dependency-update \
            --set cd.server.config.url=http://${local.argo_host} \
            --set cd.server.ingress.hosts[0]=${local.argo_host} \
@@ -65,7 +33,6 @@ resource null_resource manager_argo {
            --set cd.configs.secret.extra."dex\.github\.clientID"=$${GITHUB_ID} \
            --set cd.configs.secret.extra."dex\.github\.clientSecret"=$${GITHUB_SECRET} \
            --wait
-
       #     --set cd.server.ingress.tls[0].hosts[0]=${local.argo_host} \
     EOC
   }
@@ -110,7 +77,10 @@ resource null_resource manager_argo {
              --project default \
              --repo https://github.com/ghilbut/byfs-modules.git \
              --revision ${local.revision} \
+             --helm-set-string cd.server.config.url=http://${local.argo_host} \
+             --helm-set-string cd.server.ingress.hosts[0]=${local.argo_host} \
              --sync-option Prune=true
+      #     --set cd.server.ingress.tls[0].hosts[0]=${local.argo_host} \
     EOC
   }
 
@@ -119,6 +89,10 @@ resource null_resource manager_argo {
     when    = destroy
     command = <<-EOC
       #!/bin/sh -eux
+      argocd --config ${self.triggers.argoconfig} \
+             --grpc-web \
+             --insecure \
+             app delete manager-argo
       helm --kubeconfig ${self.triggers.kubeconfig} \
            --namespace manager-argo \
            uninstall manager-argo
