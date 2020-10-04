@@ -1,7 +1,5 @@
 ---
 server:
-  persistence:
-    enabled: false
   ingress:
     enabled: true
     annotations:
@@ -15,6 +13,8 @@ server:
     #tls:
     #- hosts: []
     #  secretName: drone-tls
+  persistentVolume:
+    enabled: false
   env:
     #DRONE_DATABASE_DATASOURCE:
     #DRONE_DATABASE_DRIVER:     mysql
