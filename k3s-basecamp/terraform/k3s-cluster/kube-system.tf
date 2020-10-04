@@ -7,6 +7,28 @@ resource null_resource kube_system2 {
   }
 
   provisioner local-exec {
+    command = <<-EOC
+      kubectl --kubeconfig ${var.kubeconfig} \
+              --namespace kube-system \
+              apply -f - <<EOF
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: aws-auth
+        namespace: kube-system
+      data:
+        mapRoles: |
+          - rolearn: ${aws_iam_role.basecamp.arn}
+            username: system:node:${aws_instance.basecamp.private_dns}
+            groups:
+            - system:bootstrappers
+            - system:nodes
+      EOF
+    EOC
+  }
+
+  provisioner local-exec {
     command     = "${path.module}/scripts/install-kube-system-by-argo.sh"
     environment = {
       CONFIG   = var.argoconfig
@@ -17,27 +39,4 @@ resource null_resource kube_system2 {
     }
   }
 
-/*
-  provisioner local-exec {
-    command = <<EOC
-kubectl --kubeconfig ${var.kubeconfig} \
-        --namespace kube-system \
-        apply -f - <<EOF
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: aws-auth
-  namespace: kube-system
-data:
-  mapRoles: |
-    - rolearn: ${aws_iam_role.basecamp.arn}
-      username: system:node:${aws_instance.basecamp.private_dns}
-      groups:
-      - system:bootstrappers
-      - system:nodes
-EOF
-EOC
-  }
-*/
 }

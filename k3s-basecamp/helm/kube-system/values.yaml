@@ -1,3 +1,11 @@
 ---
-RoleARN: ""
-EC2PrivateDNSName: ""
+ebs:
+  enableVolumeScheduling: "true"
+  enableVolumeResizing: "true"
+  enableVolumeSnapshot: "true"
+  valuesContent: |-
+    nodeSelector:
+      "node-role.kubernetes.io/master": "true"
+efs:
+  nodeSelector:
+    "node-role.kubernetes.io/master": "true"
