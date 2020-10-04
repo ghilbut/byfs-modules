@@ -35,6 +35,17 @@ resource null_resource manager_argo {
   }
 
   provisioner local-exec {
+    command = <<-EOF
+      export HOST=${local.argo_host}
+      while [[ "$(curl -s -o /dev/null -L -w %%{http_code} http://$${HOST}})" != "200" ]]
+      do
+        echo 'Waiting "$${HOST}" online'
+        sleep 5
+      done
+    EOF
+  }
+
+  provisioner local-exec {
     command     = "${path.module}/scripts/login-argocd.sh"
     environment = {
       ARGOCONFIG      = var.argoconfig
