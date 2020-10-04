@@ -1,14 +1,19 @@
 resource null_resource manager_drone {
+  triggers = {
+    argoconfig = var.argoconfig
+    kubeconfig = var.kubeconfig
+  }
 
   provisioner local-exec {
     command = <<-EOC
       #!/bin/sh -eux
+      kubectl --kubeconfig ${self.triggers.kubeconfig} \
+              create namespace manager-drone
       argocd --config ${var.argoconfig} \
              --grpc-web \
              --insecure \
              app create manager-drone \
              --auto-prune \
-             --create-namespace \
              --dest-namespace manager-drone \
              --dest-server https://kubernetes.default.svc \
              --helm-set server.ingress.hosts[0].host="drone.ghilbut.com" \
@@ -17,7 +22,7 @@ resource null_resource manager_drone {
              --path k3s-basecamp/helm/manager-drone \
              --project default \
              --repo https://github.com/ghilbut/byfs-modules.git \
-             --revision ${var.revision} \
+             --revision ${local.revision} \
              --self-heal \
              --sync-option Prune=true \
              --sync-policy automated
@@ -25,8 +30,16 @@ resource null_resource manager_drone {
   }
 
   provisioner local-exec {
+    when    = destroy
     command = <<-EOC
-
+      #!/bin/sh -eux
+      argocd --config ${self.triggers.argoconfig} \
+             --grpc-web \
+             --insecure \
+             app delete manager-drone
+      kubectl --kubeconfig ${self.triggers.kubeconfig} \
+              delete namespace manager-drone \
+              --wait
     EOC
   }
 }

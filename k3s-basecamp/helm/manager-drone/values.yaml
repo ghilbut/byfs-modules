@@ -41,7 +41,7 @@ server:
 runner:
   env:
     DRONE_DEBUG: "false"
-    DRONE_NAMESPACE_DEFAULT: {{ .Release.Namespace }}
+    DRONE_NAMESPACE_DEFAULT: manager-drone
     DRONE_RPC_SECRET: qwerty
     DRONE_RUNNER_CAPACITY: "4"
     DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
@@ -50,7 +50,7 @@ runner:
 
 secrets:
   rbac:
-    secretNamespace: {{ .Release.Namespace }}
+    secretNamespace: manager-drone
   env:
     SECRET_KEY: your-shared-secret-value-here
-    KUBERNETES_NAMESPACE: {{ .Release.Namespace }}
+    KUBERNETES_NAMESPACE: manager-drone
