@@ -34,7 +34,7 @@ server:
     DRONE_RPC_SECRET: qwerty
     DRONE_SERVER_HOST: drone
     DRONE_SERVER_PROTO: http
-    DRONE_SERVER_PROXY_HOST: drone.ghilbut.net
+    DRONE_SERVER_PROXY_HOST: drone.ghilbut.com
     DRONE_SERVER_PROXY_PROTO: http
     DRONE_USER_CREATE: username:ghilbut,admin:true
 
