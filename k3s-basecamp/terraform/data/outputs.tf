@@ -2,7 +2,6 @@ output ebs_vpn_id {
   value = aws_ebs_volume.vpn.id
 }
 
-/*
 output mysql_host {
   value = aws_db_instance.mysql.address
 }
@@ -27,4 +26,3 @@ output mysql_password_secret {
   }
   sensitive = true
 }
-*/

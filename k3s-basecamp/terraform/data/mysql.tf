@@ -1,4 +1,3 @@
-/*
 ################################################################
 ##
 ##  MySQL 5.7
@@ -130,7 +129,6 @@ resource aws_db_instance mysql {
 }
 
 
-
 ################################################################
 ##
 ##  AWS Secret Manager
@@ -148,4 +146,3 @@ resource aws_secretsmanager_secret_version mysql_password {
   secret_id     = aws_secretsmanager_secret.mysql_password.id
   secret_string = random_password.mysql_password.result
 }
-*/
