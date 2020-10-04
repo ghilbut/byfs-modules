@@ -17,6 +17,7 @@ resource null_resource manager_drone {
              --dest-namespace manager-drone \
              --dest-server https://kubernetes.default.svc \
              --helm-set server.ingress.hosts[0].host="drone.ghilbut.com" \
+             --helm-set server.ingress.hosts[0].paths[0]="/" \
              --helm-set server.env.DRONE_GITHUB_CLIENT_ID=bf3589b369b96b5a4fbc \
              --helm-set server.env.DRONE_GITHUB_CLIENT_SECRET=b079aba668617453d5d7f08ae0b0b1bd0b302cfe \
              --path k3s-basecamp/helm/manager-drone \

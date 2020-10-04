@@ -1,5 +1,7 @@
 ---
 server:
+  persistence:
+    enabled: false
   ingress:
     enabled: true
     annotations:
@@ -32,7 +34,7 @@ server:
     DRONE_LOGS_TRACE: "false"
     DRONE_REPOSITORY_FILTER: ""
     DRONE_RPC_SECRET: qwerty
-    DRONE_SERVER_HOST: drone
+    DRONE_SERVER_HOST: manager-drone-server
     DRONE_SERVER_PROTO: http
     DRONE_SERVER_PROXY_HOST: drone.ghilbut.com
     DRONE_SERVER_PROXY_PROTO: http
