@@ -2,6 +2,8 @@
 dashboard:
   extraArgs:
   - --enable-insecure-login
+  service:
+    externalPort: 80
   ingress:
     enabled: true
     annotations:
