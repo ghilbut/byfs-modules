@@ -2,11 +2,6 @@
 dashboard:
   extraArgs:
   - --enable-insecure-login
-  - --port=8444
-  - --insecure-port=8443
-  - --insecure-bind-address=0.0.0.0
-  service:
-    externalPort: 80
   ingress:
     enabled: true
     annotations:
@@ -18,9 +13,7 @@ dashboard:
     paths:
     - /
     hosts: []
+    tls: []
     #tls:
     #- hosts: []
     #  secretName: kubernetes-dashboard-tls
-#aws-efs-csi-driver:
-#  nodeSelector:
-#    "node-role.kubernetes.io/master": "true"
