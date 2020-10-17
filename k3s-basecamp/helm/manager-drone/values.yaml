@@ -22,12 +22,12 @@ server:
     DRONE_GITHUB_CLIENT_ID: ""
     #  valueFrom:
     #    secretKeyRef:
-    #      name: drone-secret
+    #      name: drone-secrets
     #      key:  DRONE_GITHUB_CLIENT_ID
     DRONE_GITHUB_CLIENT_SECRET: ""
     #  valueFrom:
     #    secretKeyRef:
-    #      name: drone-secret
+    #      name: drone-secrets
     #      key:  DRONE_GITHUB_CLIENT_SECRET
     ## Ref: https://docs.drone.io/server/reference/
     DRONE_LOGS_DEBUG: "false"
