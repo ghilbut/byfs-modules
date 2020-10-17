@@ -8,10 +8,10 @@ appVersion: 1.16.0
 
 dependencies:
 ## https://github.com/kubernetes/dashboard
-- name: kubernetes-dashboard
-  version: 2.7.1
-  repository: https://kubernetes.github.io/dashboard/
-  alias: dashboard
+#- name: kubernetes-dashboard
+#  version: 2.7.1
+#  repository: https://kubernetes.github.io/dashboard/
+#  alias: dashboard
 ## https://github.com/kubernetes-sigs/aws-ebs-csi-driver
 ## Latest file version is v0.7.0. But, chart's file version is v0.5.0
 #- name: aws-ebs-csi-driver
