@@ -13,6 +13,6 @@ dashboard:
     #tls:
     #- hosts: []
     #  secretName: kubernetes-dashboard-tls
-#efs:
+#aws-efs-csi-driver:
 #  nodeSelector:
 #    "node-role.kubernetes.io/master": "true"
