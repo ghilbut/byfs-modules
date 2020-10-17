@@ -2,6 +2,9 @@
 dashboard:
   extraArgs:
   - --enable-insecure-login
+  - --port=8444
+  - --insecure-port=8443
+  - --insecure-bind-address=0.0.0.0
   service:
     externalPort: 80
   ingress:
