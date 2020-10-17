@@ -13,6 +13,6 @@ dashboard:
     #tls:
     #- hosts: []
     #  secretName: kubernetes-dashboard-tls
-efs:
-  nodeSelector:
-    "node-role.kubernetes.io/master": "true"
+#efs:
+#  nodeSelector:
+#    "node-role.kubernetes.io/master": "true"
