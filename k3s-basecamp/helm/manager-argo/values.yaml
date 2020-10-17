@@ -36,6 +36,6 @@ cd:
             clientSecret: $dex.github.clientSecret
             orgs: []
     ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
-    rbacConfig: |
+    rbacConfig:
       policy.default: role:readonly
       policy.csv: ""
