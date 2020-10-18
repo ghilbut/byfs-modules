@@ -15,8 +15,7 @@ grafana:
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "false"
-    hosts:
-    - grafana.storage.dev.9rum.cc
+    hosts: []
 
   admin:
     existingSecret: grafana-admin-secret
