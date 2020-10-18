@@ -1,0 +1,58 @@
+---
+server:
+  ingress:
+    enabled: true
+    annotations:
+      #cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      #kubernetes.io/tls-acme: "true"
+    hosts:
+    - host: ""
+      paths:
+      - /
+    #tls:
+    #- hosts: []
+    #  secretName: drone-tls
+  persistentVolume:
+    enabled: false
+  env:
+    #DRONE_DATABASE_DATASOURCE:
+    #DRONE_DATABASE_DRIVER:     mysql
+    ## Ref: https://docs.drone.io/installation/providers/github/
+    DRONE_GITHUB_CLIENT_ID: ""
+    #  valueFrom:
+    #    secretKeyRef:
+    #      name: drone-secrets
+    #      key:  DRONE_GITHUB_CLIENT_ID
+    DRONE_GITHUB_CLIENT_SECRET: ""
+    #  valueFrom:
+    #    secretKeyRef:
+    #      name: drone-secrets
+    #      key:  DRONE_GITHUB_CLIENT_SECRET
+    ## Ref: https://docs.drone.io/server/reference/
+    DRONE_LOGS_DEBUG: "false"
+    DRONE_LOGS_TRACE: "false"
+    DRONE_REPOSITORY_FILTER: ""
+    DRONE_RPC_SECRET: qwerty
+    DRONE_SERVER_HOST: manager-drone-server
+    DRONE_SERVER_PROTO: http
+    DRONE_SERVER_PROXY_HOST: drone.ghilbut.com
+    DRONE_SERVER_PROXY_PROTO: http
+    DRONE_USER_CREATE: username:ghilbut,admin:true
+
+runner:
+  env:
+    DRONE_DEBUG: "false"
+    DRONE_NAMESPACE_DEFAULT: manager-drone
+    DRONE_RPC_SECRET: qwerty
+    DRONE_RUNNER_CAPACITY: "4"
+    DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
+    DRONE_SECRET_PLUGIN_TOKEN: your-shared-secret-value-here
+    DRONE_TRACE: "false"
+
+secrets:
+  rbac:
+    secretNamespace: manager-drone
+  env:
+    SECRET_KEY: your-shared-secret-value-here
+    KUBERNETES_NAMESPACE: manager-drone

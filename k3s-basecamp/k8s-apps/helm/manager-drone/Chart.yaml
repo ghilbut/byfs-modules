@@ -1,6 +1,7 @@
+---
 apiVersion: v2
 name: drone
-description: Drone CI
+description: A Helm chart for Drone CI
 type: application
 version: 0.1.0
 appVersion: 1.16.0

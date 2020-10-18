@@ -1,0 +1,11 @@
+cp-helm-charts:
+  cp-zookeeper:
+    servers: 3
+    persistence:
+      enabled: false
+  cp-kafka:
+    brokers: 4
+    configurationOverrides:
+
+    persistence:
+      enabled: false
