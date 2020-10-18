@@ -24,9 +24,10 @@ resource mysql_user grafana {
 }
 
 resource mysql_grant grafana {
-  user     = mysql_user.grafana.user
-  host     = mysql_user.grafana.host
-  database = mysql_database.grafana.name
+  user       = mysql_user.grafana.user
+  host       = mysql_user.grafana.host
+  database   = mysql_database.grafana.name
+  privileges = ["ALL"]
 }
 
 
@@ -54,7 +55,7 @@ resource kubernetes_secret grafana_admin_secret {
 
   data = {
     username = local.grafana_username
-    password = random_password.grafana_admian.result
+    password = random_password.grafana_admin.result
   }
 
   type = "kubernetes.io/basic-auth"
@@ -71,8 +72,8 @@ resource kubernetes_secret grafana_secret {
   }
 
   data = {
-    GF_AUTH_GITHUB_CLIENT_ID     = var.grafana_github_client_id
-    GF_AUTH_GITHUB_CLIENT_SECRET = var.grafana_github_client_secret
+    GF_AUTH_GITHUB_CLIENT_ID     = var.github_clients.grafana.id
+    GF_AUTH_GITHUB_CLIENT_SECRET = var.github_clients.grafana.secret
     GF_DATABASE_USER             = local.grafana_username
     GF_DATABASE_PASSWORD         = random_password.grafana_mysql.result
   }
@@ -107,7 +108,7 @@ resource null_resource grafana {
 data template_file grafana {
   # https://argoproj.github.io/argo-cd/operator-manual/application.yaml
   template = <<-EOT
-    kubectl --kubeconfig ${local.kubeconfig_path} $METHOD -f - <<EOF
+    kubectl --kubeconfig ${var.kubeconfig_path} $METHOD -f - <<EOF
     apiVersion: argoproj.io/v1alpha1
     kind: Application
     metadata:
@@ -121,10 +122,12 @@ data template_file grafana {
         path: k3s-basecamp/k8s-apps/helm/observer-grafana
         helm:
           parameters:
+          - name:  grafana.ingress.hosts[0]
+            value: grafana.${var.domain_name}
           - name:  grafana.grafana\\.ini.server.protocol
             value: http
           - name:  grafana.grafana\\.ini.server.root_url
-            value: grafana.${var.domain_name}
+            value: http://grafana.${var.domain_name}
           - name:  grafana.grafana\\.ini.database.host
             value: ${var.mysql_host}:${var.mysql_port}
           - name:  grafana.grafana\\.ini.database.name

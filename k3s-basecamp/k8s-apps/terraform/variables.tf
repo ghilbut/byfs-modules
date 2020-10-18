@@ -18,12 +18,16 @@ variable ingress_ip {
   type = string
 }
 
-variable mysq_host {
+variable mysql_host {
   type = string
 }
 
 variable mysql_port {
   type = number
+}
+
+variable github_clients {
+  type = map(object({ id=string, secret=string }))
 }
 
 variable github_orgs {

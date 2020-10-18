@@ -27,6 +27,11 @@ output mysql_username {
   sensitive = true
 }
 
+output mysql_password {
+  value = random_password.mysql_password.result
+  sensitive = true
+}
+
 output mysql_password_secret {
   value = {
     arn = aws_secretsmanager_secret.mysql_password.arn
