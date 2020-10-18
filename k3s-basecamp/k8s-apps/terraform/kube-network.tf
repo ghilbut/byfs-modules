@@ -41,7 +41,7 @@ data template_file kube_network {
       source:
         repoURL: ${var.helmchart_url}
         targetRevision: ${var.helmchart_rev}
-        path: k3s-basecamp/helm/kube-network
+        path: k3s-basecamp/k8s-apps/helm/kube-network
         helm:
           parameters:
           - name:  ingress-nginx.controller.service.externalIPs[0]
@@ -104,7 +104,7 @@ data template_file kube_network_issuers {
       source:
         repoURL: ${var.helmchart_url}
         targetRevision: ${var.helmchart_rev}
-        path: k3s-basecamp/helm/kube-network-issuers
+        path: k3s-basecamp/k8s-apps/helm/kube-network-issuers
         helm:
           valueFiles:
           - values.yaml

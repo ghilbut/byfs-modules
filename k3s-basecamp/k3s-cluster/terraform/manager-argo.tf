@@ -35,7 +35,7 @@ resource null_resource argo {
            --set configs.secret.argocdServerAdminPasswordMtime=$${MTIME} \
            --set configs.secret.extra."dex\.github\.clientID"=$${GITHUB_ID} \
            --set configs.secret.extra."dex\.github\.clientSecret"=$${GITHUB_SECRET} \
-           --values ${path.module}/helm/argo-values.yaml \
+           --values ${path.module}/../helm/argo-values.yaml \
            --version 2.9.3 \
            --wait
     EOC

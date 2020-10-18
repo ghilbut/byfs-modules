@@ -1,3 +1,11 @@
+output ebs_cp_zookeeper_ids {
+  value = [aws_ebs_volume.cp_zookeeper.*.id]
+}
+
+output ebs_cp_kafka_ids {
+  value = [aws_ebs_volume.cp_kafka.*.id]
+}
+
 output ebs_vpn_id {
   value = aws_ebs_volume.vpn.id
 }

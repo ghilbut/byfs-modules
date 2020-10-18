@@ -1,19 +1,16 @@
 locals {
-  dashboard_host           = "k3s.${var.domain_name}"
-  kube_system_namespace = "kube-system"
+  argo_host      = "argo.${var.domain_name}"
+  argo_namespace = "manager-argo"
 }
 
-resource null_resource kube_system {
-  depends_on = [
-    null_resource.argo,
-  ]
+resource null_resource argo {
   triggers = {
-    kubeconfig = var.kubeconfig_path
-    sync = data.template_file.kube_system.rendered
+    kubeconfig_path = var.kubeconfig_path
+    definition = data.template_file.argo.rendered
   }
 
   provisioner local-exec {
-    command = self.triggers.sync
+    command = self.triggers.definition
     environment = {
       METHOD = "apply"
     }
@@ -21,47 +18,43 @@ resource null_resource kube_system {
 
   provisioner local-exec {
     when    = destroy
-    command = self.triggers.sync
+    command = self.triggers.definition
     environment = {
       METHOD = "delete"
     }
   }
 }
 
-data template_file kube_system {
+data template_file argo {
   ## https://argoproj.github.io/argo-cd/operator-manual/application.yaml
   template = <<-EOT
     kubectl --kubeconfig ${var.kubeconfig_path} $METHOD -f - <<EOF
     apiVersion: argoproj.io/v1alpha1
     kind: Application
     metadata:
-      name: kube-system
+      name: manager-argo
       namespace: ${local.argo_namespace}
     spec:
       project: default
       source:
         repoURL: ${var.helmchart_url}
         targetRevision: ${var.helmchart_rev}
-        path: k3s-basecamp/helm/kube-system
+        path: k3s-basecamp/k8s-apps/helm/manager-argo
         helm:
           parameters:
-          - name:  dashboard.ingress.hosts[0]
-            value: ${local.dashboard_host}
-          - name:  dashboard.ingress.tls[0].hosts[0]
-            value: ${local.dashboard_host}
+          - name:  cd.server.ingress.hosts[0]
+            value: ${local.argo_host}
+          - name:  cd.server.config.url
+            value: http://${local.argo_host}
           valueFiles:
           - values.yaml
           version: v2
       destination:
         server: https://kubernetes.default.svc
-        namespace: ${local.kube_system_namespace}
+        namespace: ${local.argo_namespace}
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
         syncOptions:
         - Validate=true
-        - CreateNamespace=true
     EOF
   EOT
 }

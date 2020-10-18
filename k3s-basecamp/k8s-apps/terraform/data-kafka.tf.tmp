@@ -1,0 +1,98 @@
+resource kubernetes_persistent_volume cp_zookeeper {
+  count = length(var.ebs_cp_zookeeper_ids)
+
+  metadata {
+    name = "cp-zookeeper-${count.index}"
+  }
+  spec {
+    access_modes = [
+     "ReadWriteOnce",
+    ]
+    capacity = {
+      storage = "2Gi"
+    }
+    aws_elastic_block_store {
+      fs_type = "ext4"
+      volume_id = var.ebs_cp_zookeeper_ids[count.index]
+    }
+  }
+}
+
+resource kubernetes_persistent_volume_claim cp_zookeeper_data {
+  count = length(var.ebs_cp_zookeeper_ids)
+
+  metadata {
+    name = "cp-zookeeper-data-${count.index}"
+    namespace = "data-kafka"
+  }
+  spec {
+    access_modes = [
+      "ReadWriteMany",
+    ]
+    resources {
+      requests = {
+        storage = "1Gi"
+      }
+    }
+    volume_name = kubernetes_persistent_volume.cp_zookeeper.metadata.*.name[count.index]
+  }
+}
+
+resource kubernetes_persistent_volume_claim cp_zookeeper_log {
+  count = length(var.ebs_cp_zookeeper_ids)
+
+  metadata {
+    name = "cp-zookeeper-log-${count.index}"
+    namespace = "data-kafka"
+  }
+  spec {
+    access_modes = [
+      "ReadWriteMany",
+    ]
+    resources {
+      requests = {
+        storage = "1Gi"
+      }
+    }
+    volume_name = kubernetes_persistent_volume.cp_zookeeper.metadata.*.name[count.index]
+  }
+}
+
+resource kubernetes_persistent_volume cp_kafka {
+  count = length(var.ebs_cp_kafka_ids)
+
+  metadata {
+    name = "cp-kafka-${count.index}"
+  }
+  spec {
+    access_modes = [
+     "ReadWriteOnce",
+    ]
+    capacity = {
+      storage = "1Gi"
+    }
+    aws_elastic_block_store {
+      fs_type = "ext4"
+      volume_id = var.ebs_cp_kafka_ids[count.index]
+    }
+  }
+}
+
+resource kubernetes_persistent_volume_claim cp_kafka {
+  count = length(var.ebs_cp_kafka_ids)
+
+  metadata {
+    name = "cp-kafka-${count.index}"
+  }
+  spec {
+    access_modes = [
+      "ReadWriteMany",
+    ]
+    resources {
+      requests = {
+        storage = "10Gi"
+      }
+    }
+    volume_name = kubernetes_persistent_volume.cp_kafka.metadata.*.name[count.index]
+  }
+}
