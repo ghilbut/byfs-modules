@@ -2,22 +2,28 @@ variable domain_name {
   type = string
 }
 
-variable tags {
-  type = map(string)
-}
-
-variable kubeconfig {
+variable kubeconfig_path {
   type = string
 }
 
-variable argoconfig {
+variable helmchart_url {
   type = string
 }
 
-variable argo_github_client_id {
+variable helmchart_rev {
   type = string
 }
 
-variable argo_github_client_secret {
+variable ingress_ip {
   type = string
 }
+
+/*
+variable ebs_cp_zookeeper_ids {
+  type = list(string)
+}
+
+variable ebs_cp_kafka_ids {
+  type = list(string)
+}
+*/

@@ -20,6 +20,7 @@ resource null_resource manager_drone {
              --helm-set server.ingress.hosts[0].paths[0]="/" \
              --helm-set server.env.DRONE_GITHUB_CLIENT_ID=bf3589b369b96b5a4fbc \
              --helm-set server.env.DRONE_GITHUB_CLIENT_SECRET=b079aba668617453d5d7f08ae0b0b1bd0b302cfe \
+             --helm-set server.env.DRONE_REPOSITORY_FILTER=ghilbut \
              --path k3s-basecamp/helm/manager-drone \
              --project default \
              --repo https://github.com/ghilbut/byfs-modules.git \

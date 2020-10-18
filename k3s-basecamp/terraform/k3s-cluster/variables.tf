@@ -22,11 +22,7 @@ variable tags {
   type = map(string)
 }
 
-variable kubeconfig {
-  type = string
-}
-
-variable argoconfig {
+variable kubeconfig_path {
   type = string
 }
 

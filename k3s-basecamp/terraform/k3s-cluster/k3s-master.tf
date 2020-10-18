@@ -56,15 +56,19 @@ resource null_resource k3s_cluster {
   provisioner local-exec {
     command = <<-EOC
       #!/bin/sh -eux
-      rm -rf ${dirname(var.kubeconfig)}
-      mkdir -p ${dirname(var.kubeconfig)}
+      rm -rf ${dirname(var.kubeconfig_path)}
+      mkdir -p ${dirname(var.kubeconfig_path)}
       scp -i ${var.private_key_path} \
           -o StrictHostKeyChecking=no \
           -o UserKnownHostsFile=/dev/null \
           -q \
           ubuntu@${aws_instance.master.public_ip}:/etc/rancher/k3s/k3s.yaml \
-          ${dirname(var.kubeconfig)}
-      sed -i -e "s/127\.0\.0\.1/${local.k3s_host}/g" ${var.kubeconfig}
+          ${dirname(var.kubeconfig_path)}
+      sed -i -e "s/127\.0\.0\.1/${local.k3s_host}/g" ${var.kubeconfig_path}
     EOC
   }
+}
+
+provider kubernetes {
+  config_path = var.kubeconfig_path
 }

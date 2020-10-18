@@ -19,8 +19,6 @@ locals {
 
 locals {
   k3s_host       = "k3s.${var.domain_name}"
-  helmchart_path = "/Users/ghilbut/work/workbench/ghilbut/byfs-modules/k3s-basecamp/helm"
-  argo_host      = "argo.${var.domain_name}"
   revision       = "featrue/k3s-basecamp-terraform"
   #revision       = "master"
 }

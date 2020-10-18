@@ -1,0 +1,35 @@
+---
+server:
+  extraArgs:
+  - --insecure
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    hosts:
+    - ""
+    paths:
+    - /
+    extraPaths:
+    - path: /api/dex/*
+      backend:
+        serviceName: manager-argo-argocd-dex-server
+        servicePort: 5556
+  config:
+    url: ""
+    repositories: |
+      - url: https://github.com/ghilbut/byfx-modules.git
+    dex.config: |
+      connectors:
+      - type: github
+        id:   github
+        name: GitHub
+        config:
+          clientID: $dex.github.clientID
+          clientSecret: $dex.github.clientSecret
+          orgs: []
+  ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
+  rbacConfig:
+    policy.default: role:readonly
+    policy.csv: ""
