@@ -8,6 +8,6 @@ appVersion: 1.16.0
 dependencies:
 # https://github.com/argoproj/argo-helm
 - name: argo-cd
-  version: 2.7.4
+  version: 2.9.3
   repository: https://argoproj.github.io/argo-helm
   alias: cd
