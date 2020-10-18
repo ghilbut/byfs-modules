@@ -18,6 +18,18 @@ variable ingress_ip {
   type = string
 }
 
+variable mysq_host {
+  type = string
+}
+
+variable mysql_port {
+  type = number
+}
+
+variable github_orgs {
+  type = list(string)
+}
+
 /*
 variable ebs_cp_zookeeper_ids {
   type = list(string)
