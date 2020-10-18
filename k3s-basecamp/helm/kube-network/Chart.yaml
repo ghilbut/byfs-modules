@@ -15,6 +15,6 @@ dependencies:
   version: 3.7.1
   repository: https://kubernetes.github.io/ingress-nginx/
 # https://github.com/bitnami/charts
-#- name: metallb
-#  version: 0.1.24
-#  repository: https://charts.bitnami.com/bitnami/
+- name: metallb
+  version: 0.1.24
+  repository: https://charts.bitnami.com/bitnami/
