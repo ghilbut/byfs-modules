@@ -32,6 +32,15 @@ variable github_clients {
 
 variable github_orgs {
   type = list(string)
+  default = []
+}
+
+variable ebs_influxdb_id {
+  type = string
+}
+
+variable ebs_influxdb_size {
+  type = number
 }
 
 /*
