@@ -15,42 +15,35 @@ server:
     #  secretName: drone-tls
   persistentVolume:
     enabled: false
+  extraSecretNamesForEnvFrom:
+  - drone-server-secret
   env:
-    #DRONE_DATABASE_DATASOURCE:
-    #DRONE_DATABASE_DRIVER:     mysql
-    ## Ref: https://docs.drone.io/installation/providers/github/
-    DRONE_GITHUB_CLIENT_ID: ""
-    #  valueFrom:
-    #    secretKeyRef:
-    #      name: drone-secrets
-    #      key:  DRONE_GITHUB_CLIENT_ID
-    DRONE_GITHUB_CLIENT_SECRET: ""
-    #  valueFrom:
-    #    secretKeyRef:
-    #      name: drone-secrets
-    #      key:  DRONE_GITHUB_CLIENT_SECRET
-    ## Ref: https://docs.drone.io/server/reference/
-    DRONE_LOGS_DEBUG: "false"
-    DRONE_LOGS_TRACE: "false"
-    DRONE_REPOSITORY_FILTER: ""
-    DRONE_RPC_SECRET: qwerty
-    DRONE_SERVER_HOST: manager-drone-server
-    DRONE_SERVER_PROTO: http
-    DRONE_SERVER_PROXY_HOST: drone.ghilbut.com
+    DRONE_DATABASE_DRIVER:    mysql
+    DRONE_LOGS_DEBUG:         "false"
+    DRONE_LOGS_TRACE:         "false"
+    DRONE_REPOSITORY_FILTER:  ""
+    DRONE_SERVER_HOST:        manager-drone-server
+    DRONE_SERVER_PROTO:       http
+    DRONE_SERVER_PROXY_HOST:  ""
     DRONE_SERVER_PROXY_PROTO: http
-    DRONE_USER_CREATE: username:ghilbut,admin:true
+    DRONE_USER_CREATE:        username:ghilbut,admin:true
 
 runner:
+  extraSecretNamesForEnvFrom:
+  - drone-runner-secret
+  rbac:
+    buildNamespaces:
+    - manager-drone
   env:
     DRONE_DEBUG: "false"
     DRONE_NAMESPACE_DEFAULT: manager-drone
-    DRONE_RPC_SECRET: qwerty
     DRONE_RUNNER_CAPACITY: "4"
     DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
-    DRONE_SECRET_PLUGIN_TOKEN: your-shared-secret-value-here
     DRONE_TRACE: "false"
 
 secrets:
+  extraSecretNamesForEnvFrom:
+  - drone-secrets-plugin-secret
   rbac:
     secretNamespace: manager-drone
   env:
