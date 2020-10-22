@@ -1,20 +1,18 @@
 ---
 namespace: data-influxdb
 
-blue:
+influxdb:
   persistence:
     enabled: false
+  setDefaultUser:
+    enabled: true
+    user:
+      existingSecret: influxdb-auth-secret
   ingress:
     enabled: true
-    hostname: influxdb.storage.k9etool.io
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: In
-            values:
-            - icloud-kage-prod-worker-1
+    hostname: ""
+  env:
+  - name:  INFLUXDB_DB
+    value: "telegraf"
   initScripts:
     enabled: true
