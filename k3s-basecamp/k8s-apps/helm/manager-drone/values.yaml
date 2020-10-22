@@ -35,11 +35,14 @@ runner:
     buildNamespaces:
     - manager-drone
   env:
-    DRONE_DEBUG: "false"
-    DRONE_NAMESPACE_DEFAULT: manager-drone
-    DRONE_RUNNER_CAPACITY: "4"
+    DRONE_DEBUG:                  "false"
+    DRONE_HTTP_HOST:              manager-drone-runner
+    DRONE_NAMESPACE_DEFAULT:      manager-drone
+    DRONE_RPC_HOST:               manager-drone-server
+    DRONE_RPC_PROTO:              http
+    DRONE_RUNNER_CAPACITY:        "4"
     DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
-    DRONE_TRACE: "false"
+    DRONE_TRACE:                  "false"
 
 secrets:
   extraSecretNamesForEnvFrom:
