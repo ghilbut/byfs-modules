@@ -50,5 +50,4 @@ secrets:
   rbac:
     secretNamespace: manager-drone
   env:
-    SECRET_KEY: your-shared-secret-value-here
     KUBERNETES_NAMESPACE: manager-drone
