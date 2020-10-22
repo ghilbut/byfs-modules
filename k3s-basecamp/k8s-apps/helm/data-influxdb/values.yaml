@@ -3,7 +3,8 @@ namespace: data-influxdb
 
 influxdb:
   persistence:
-    enabled: false
+    enabled: true
+    existingClaim: influxdb-pvc
   setDefaultUser:
     enabled: true
     user:
@@ -15,4 +16,4 @@ influxdb:
   - name:  INFLUXDB_DB
     value: "telegraf"
   initScripts:
-    enabled: true
+    enabled: false
