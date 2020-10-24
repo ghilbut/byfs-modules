@@ -13,104 +13,104 @@ metadata:
     kubernetes.io/cluster-service: "true"
 rules:
 - apiGroups:
-        - ""
-        resources:
-        - nodes
-        verbs:
-        - '*'
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - '*'
 - apiGroups:
-        - ""
-        resources:
-        - nodes/status
-        verbs:
-        - patch
+  - ""
+  resources:
+  - nodes/status
+  verbs:
+  - patch
 - apiGroups:
-        - ""
-        resources:
-        - services
-        verbs:
-        - list
-        - watch
-        - patch
+  - ""
+  resources:
+  - services
+  verbs:
+  - list
+  - watch
+  - patch
 - apiGroups:
-        - ""
-        resources:
-        - services/status
-        verbs:
-        - update
-        - patch
+  - ""
+  resources:
+  - services/status
+  verbs:
+  - update
+  - patch
 - apiGroups:
-        - ""
-        resources:
-        - events
-        verbs:
-        - create
-        - patch
-        - update
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+  - update
 # For leader election
 - apiGroups:
-        - ""
-        resources:
-        - endpoints
-        verbs:
-        - create
+  - ""
+  resources:
+  - endpoints
+  verbs:
+  - create
 - apiGroups:
-        - ""
-        resources:
-        - endpoints
-        resourceNames:
-        - "cloud-controller-manager"
-        verbs:
-        - get
-        - list
-        - watch
-        - update
+  - ""
+  resources:
+  - endpoints
+  resourceNames:
+  - "cloud-controller-manager"
+  verbs:
+  - get
+  - list
+  - watch
+  - update
 - apiGroups:
-        - ""
-        resources:
-        - configmaps
-        verbs:
-        - create
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
 - apiGroups:
-        - ""
-        resources:
-        - configmaps
-        resourceNames:
-        - "cloud-controller-manager"
-        verbs:
-        - get
-        - update
+  - ""
+  resources:
+  - configmaps
+  resourceNames:
+  - "cloud-controller-manager"
+  verbs:
+  - get
+  - update
 - apiGroups:
-        - ""
-        resources:
-        - serviceaccounts
-        verbs:
-        - create
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
 - apiGroups:
-        - ""
-        resources:
-        - secrets
-        verbs:
-        - get
-        - list
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
 - apiGroups:
-        - "coordination.k8s.io"
-        resources:
-        - leases
-        verbs:
-        - get
-        - create
-        - update
-        - list
+  - "coordination.k8s.io"
+  resources:
+  - leases
+  verbs:
+  - get
+  - create
+  - update
+  - list
 # For the PVL
 - apiGroups:
-        - ""
-        resources:
-        - persistentvolumes
-        verbs:
-        - list
-        - watch
-        - patch
+  - ""
+  resources:
+  - persistentvolumes
+  verbs:
+  - list
+  - watch
+  - patch
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
