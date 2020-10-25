@@ -17,7 +17,7 @@ resource aws_instance master {
     volume_type = "gp2"
     volume_size = 80
   }
-  subnet_id                            = data.aws_subnet.default.id
+  subnet_id                            = var.subnet_id
   vpc_security_group_ids               = [
     aws_security_group.private.id,
     aws_security_group.public.id,
@@ -25,6 +25,7 @@ resource aws_instance master {
 
   tags = merge({
     Name = "ec2-k3s-basecamp"
+    KubernetesCluster = var.cluster_name
   }, local.tags)
 }
 
@@ -138,20 +139,10 @@ resource aws_route53_record wildcard_public {
 ##  VPC
 ##
 
-data aws_vpc default {
-  default = true
-}
-
-data aws_subnet default {
-  availability_zone = "${var.aws_region}a"
-  default_for_az = true
-  vpc_id = data.aws_vpc.default.id
-}
-
 resource aws_security_group private {
   name        = "basecamp-private"
   description = "Allow all inbound traffic from private IPs"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "private"
@@ -170,13 +161,14 @@ resource aws_security_group private {
 
   tags = merge({
     Name = "sg-basecamp-private"
+    KubernetesCluster = var.cluster_name
   }, local.tags)
 }
 
 resource aws_security_group public {
   name        = "basecamp-public"
   description = "Allow all inbound traffic from public IPs"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "public"
@@ -195,5 +187,6 @@ resource aws_security_group public {
 
   tags = merge({
     Name = "sg-basecamp-public"
+    KubernetesCluster = var.cluster_name
   }, local.tags)
 }

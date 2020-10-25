@@ -39,3 +39,7 @@ output mysql_password_secret {
   }
   sensitive = true
 }
+
+output ebs_influxdb_id {
+  value = aws_ebs_volume.influxdb.id
+}

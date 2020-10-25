@@ -1,3 +1,8 @@
+output kubernetes_token {
+  value = data.external.kubernetes_token.result.token
+  sensitive = true
+}
+
 output grafana_admin_username {
   value = local.grafana_username
 }

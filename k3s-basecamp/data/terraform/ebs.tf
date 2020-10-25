@@ -2,6 +2,15 @@ locals {
   az = "${var.aws_region}a"
 }
 
+resource aws_ebs_volume influxdb {
+  availability_zone = local.az
+  size              = var.ebs_influxdb_size
+
+  tags = merge({
+    Name = "ebs-basecamp-influxdb"
+  }, local.tags)
+}
+
 resource aws_ebs_volume cp_zookeeper {
   count = 3
 

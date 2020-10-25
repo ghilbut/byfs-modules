@@ -33,6 +33,10 @@ variable github_clients {
 variable github_orgs {
   type = list(string)
   default = []
+}              
+
+variable drone_repository_filter {
+  type = string
 }
 
 variable ebs_influxdb_id {

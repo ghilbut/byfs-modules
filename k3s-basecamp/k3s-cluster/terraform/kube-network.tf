@@ -2,63 +2,86 @@ locals {
   kube_network_namespace = "kube-network"
 }
 
-resource null_resource kube_network {
+resource kubernetes_namespace kube_network {
   depends_on = [
     null_resource.k3s_cluster,
   ]
+
+  metadata {
+    name = local.kube_network_namespace
+  }
+}
+
+resource helm_release metallb {
+  name       = "metallb"
+  chart      = "metallb"
+  repository = "https://charts.bitnami.com/bitnami/"
+  version    = "0.1.24"
+  namespace  = kubernetes_namespace.kube_network.metadata[0].name
+
+  set {
+    name  = "fullnameOverride"
+    value = "kube-network-metallb"
+  }
+
+  set {
+    name  = "configInline.address-pools[0].name"
+    value = "default"
+  }
+
+  set {
+    name  = "configInline.address-pools[0].protocol"
+    value = "layer2"
+  }
+
+  set {
+    name  = "configInline.address-pools[0].addresses"
+    value = "192.168.0.240-192.168.0.250"
+  }
+}
+
+resource helm_release ingress_nginx {
+  name       = "ingress-nginx"
+  chart      = "ingress-nginx"
+  repository = "https://kubernetes.github.io/ingress-nginx/"
+  version    = "3.7.1"
+  namespace  = kubernetes_namespace.kube_network.metadata[0].name
+
+  set {
+    name  = "fullnameOverride"
+    value = "kube-network-ingress-nginx"
+  }
+
+  set {
+    name  = "controller.service.externalIPs[0]"
+    value = aws_instance.master.private_ip
+  }
+}
+
+resource helm_release cert_manager {
+  name       = "cert-manager"
+  chart      = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  version    = "v1.0.2"
+  namespace  = kubernetes_namespace.kube_network.metadata[0].name
+
+  set {
+    name  = "fullnameOverride"
+    value = "kube-network-cert-manager"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = true
+  }
+}
+
+resource null_resource cert_manager_cluster_issuer {
+  depends_on = [
+    helm_release.cert_manager,
+  ]
   triggers = {
     kubeconfig = var.kubeconfig_path
-  }
-
-  # metallb
-  provisioner local-exec {
-    command = <<-EOC
-      #!/bin/sh -eux
-      helm --kubeconfig ${var.kubeconfig_path} \
-           --namespace ${local.kube_network_namespace} \
-           install metallb metallb \
-           --create-namespace \
-           --repo https://charts.bitnami.com/bitnami/ \
-           --set fullnameOverride=kube-network-metallb \
-           --set configInline.address-pools[0].name=default \
-           --set configInline.address-pools[0].protocol=layer2 \
-           --set configInline.address-pools[0].addresses=192.168.0.240-192.168.0.250 \
-           --version 0.1.24 \
-           --wait
-    EOC
-  }
-
-  # ingress-nginx
-  provisioner local-exec {
-    command = <<-EOC
-      #!/bin/sh -eux
-      export PRIVATE_IP=${aws_instance.master.private_ip}
-      helm --kubeconfig ${var.kubeconfig_path} \
-           --namespace ${local.kube_network_namespace} \
-           install ingress-nginx ingress-nginx \
-           --create-namespace \
-           --repo https://kubernetes.github.io/ingress-nginx/ \
-           --set fullnameOverride=kube-network-ingress-nginx \
-           --set controller.service.externalIPs[0]=$${PRIVATE_IP} \
-           --version 3.7.1 \
-           --wait
-    EOC
-  }
-
-  # cert-manager
-  provisioner local-exec {
-    command = <<-EOC
-      #!/bin/sh -eux
-      helm --kubeconfig ${var.kubeconfig_path} \
-           --namespace ${local.kube_network_namespace} \
-           install cert-manager cert-manager \
-           --create-namespace \
-           --repo https://charts.jetstack.io \
-           --set fullnameOverride=kube-network-cert-manager \
-           --set installCRDs=true \
-           --version v1.0.2 \
-           --wait
-    EOC
   }
 
   # cert-manager cluster-issuer

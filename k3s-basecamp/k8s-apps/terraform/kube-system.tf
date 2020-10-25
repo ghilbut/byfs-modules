@@ -1,5 +1,5 @@
 locals {
-  dashboard_host           = "k3s.${var.domain_name}"
+  dashboard_host        = "k3s.${var.domain_name}"
   kube_system_namespace = "kube-system"
 }
 
@@ -64,4 +64,15 @@ data template_file kube_system {
         - CreateNamespace=true
     EOF
   EOT
+}
+
+data external kubernetes_token {
+  depends_on = [
+    null_resource.kube_system,
+  ]
+
+  program = [
+    "${path.module}/scripts/get_kubernetes_token.sh",
+    var.kubeconfig_path,
+  ]
 }
