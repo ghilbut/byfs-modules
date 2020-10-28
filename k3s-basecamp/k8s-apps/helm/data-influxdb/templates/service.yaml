@@ -5,7 +5,7 @@ metadata:
   annotations:
 {{ toYaml .Values.influxdb.service.annotations | indent 4 }}
 {{- end }}
-  name: {{ include "influxdb.fullname" . }}-external-name
+  name: influxdb-external-name
   labels:
     {{- include "influxdb.labels" . | nindent 4 }}
 spec:
@@ -41,4 +41,4 @@ spec:
   {{- end }}
   selector:
     {{- include "influxdb.selectorLabels" . | nindent 4 }}
-  externalName: {{ include "influxdb.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local 
+  externalName: data-influxdb.{{ .Release.Namespace }}.svc.cluster.local 
