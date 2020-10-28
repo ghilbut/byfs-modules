@@ -24,21 +24,21 @@ grafana:
 
   envFromSecret: grafana-secret
 
-  #datasources:
-  #  datasources.yaml:
-  #    apiVersion: 1
-  #    datasources:
-  #    - name: influxdb-telegraf
-  #      type: influxdb
-  #      access: proxy
-  #      database: telegraf
-  #      user: $TELEGRAF_READER_USERNAME
-  #      url: http://localhost:8086
-  #      isDefault: true
-  #      jsonData:
-  #        timeInterval: "10s"
-  #      secureJsonData:
-  #        password: $TELEGRAF_READER_PASSWORD
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: influxdb-telegraf
+        type: influxdb
+        #access: proxy
+        database: telegraf
+        user: $TELEGRAF_READER_USERNAME
+        url: http://data-influxdb.data-influxdb.svc.cluster.local:8086
+        isDefault: true
+        jsonData:
+          timeInterval: "10s"
+        secureJsonData:
+          password: $TELEGRAF_READER_PASSWORD
 
   # https://grafana.com/docs/grafana/latest/administration/configuration/
   grafana.ini:
