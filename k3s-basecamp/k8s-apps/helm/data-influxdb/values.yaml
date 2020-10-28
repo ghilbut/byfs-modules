@@ -3,8 +3,7 @@ namespace: data-influxdb
 
 influxdb:
   persistence:
-    enabled: true
-    existingClaim: influxdb-pvc
+    enabled: false
   setDefaultUser:
     enabled: true
     user:
@@ -12,6 +11,11 @@ influxdb:
   ingress:
     enabled: true
     hostname: ""
+  volumes:
+  - name: data-influxdb-data
+    awsElasticBlockStore:
+      volumeID: ""
+      fsType: ext4
   env:
   - name:  INFLUXDB_DB
     value: "telegraf"
