@@ -4,6 +4,7 @@ namespace: data-influxdb
 influxdb:
   persistence:
     enabled: true
+    existingClaim: false
   setDefaultUser:
     enabled: true
     user:
