@@ -1,6 +1,4 @@
 ---
-namespace: data-influxdb
-
 influxdb:
   persistence:
     enabled: true
@@ -12,8 +10,8 @@ influxdb:
   ingress:
     enabled: true
     hostname: ""
-  env:
-  - name:  INFLUXDB_DB
-    value: "telegraf"
+  config:
+    http:
+      auth-enabled: true
   initScripts:
-    enabled: false
+    enabled: true
