@@ -3,7 +3,7 @@ namespace: data-influxdb
 
 influxdb:
   persistence:
-    enabled: false
+    enabled: true
   setDefaultUser:
     enabled: true
     user:
