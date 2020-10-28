@@ -13,5 +13,6 @@ influxdb:
   config:
     http:
       auth-enabled: true
+      ping-auth-enabled: false
   initScripts:
     enabled: true
