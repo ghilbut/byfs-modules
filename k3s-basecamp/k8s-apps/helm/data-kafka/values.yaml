@@ -14,7 +14,7 @@ kafka:
       disksPerBroker: 1
     prometheus:
       jmx:
-        enabled: false
+        enabled: true
     nodeport:
       enabled: true
       servicePort: 19092
