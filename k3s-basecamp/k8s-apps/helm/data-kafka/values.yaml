@@ -23,14 +23,14 @@ kafka:
       enabled: true
       servicePort: 19092
       firstListenerPort: 31090
-  cp-control-center:
-    configurationOverrides:
-      "replication.factor": "1"
   cp-kafka-connect:
     configurationOverrides:
       "config.storage.replication.factor": "1"
       "offset.storage.replication.factor": "1"
       "status.storage.replication.factor": "1"
+  cp-control-center:
+    configurationOverrides:
+      "replication.factor": "1"
 
 
 
