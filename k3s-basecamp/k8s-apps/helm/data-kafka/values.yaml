@@ -7,7 +7,7 @@ kafka:
       dataDirSize: 1Gi
       dataLogDirSize: 4Gi
   cp-kafka:
-    brokers: 5
+    brokers: 1
     persistence:
       enabled: true
       size: 32Gi
