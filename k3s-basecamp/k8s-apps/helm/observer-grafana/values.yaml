@@ -25,6 +25,7 @@ grafana:
   envFromSecret: grafana-secret
 
   datasources:
+    # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
     datasources.yaml:
       apiVersion: 1
       datasources:
