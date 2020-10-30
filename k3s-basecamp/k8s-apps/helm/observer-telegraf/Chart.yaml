@@ -15,6 +15,6 @@ dependencies:
 
 # https://github.com/influxdata/helm-charts
 - name: telegraf
-  version: 1.0.17
+  version: 1.7.31
   repository: https://helm.influxdata.com/
   alias: consumer
