@@ -43,6 +43,9 @@ oauth2-proxy:
       provider = "github"
   image:
     tag: v6.1.1
+  extraEnv:
+  - name:  OAUTH2_PROXY_GITHUB_ORG
+    value: ""
   ingress:
     enabled: true
     hosts:
