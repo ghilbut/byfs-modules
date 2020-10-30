@@ -35,10 +35,12 @@ kafka:
 oauth2-proxy:
   config:
     existingSecret: kafka-oauth2-secret
+    # https://oauth2-proxy.github.io/oauth2-proxy/configuration#config-file
     # https://github.com/oauth2-proxy/oauth2-proxy/blob/master/contrib/oauth2-proxy.cfg.example
     configFile: |-
       email_domains = [ "*" ]
       upstreams = [ "http://data-kafka-cp-control-center:9021" ]
+      provider = "github"
   image:
     tag: v6.1.1
   ingress:
