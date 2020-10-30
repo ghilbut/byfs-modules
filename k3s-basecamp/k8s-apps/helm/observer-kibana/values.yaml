@@ -1,6 +1,6 @@
 ---
 kibana:
-  elasticsearchHosts: "http://data-elastic.svc:9200"
+  elasticsearchHosts: "http://elasticsearch.data-elastic.svc:9200"
   ingress:
     enabled: true
     annotations:
