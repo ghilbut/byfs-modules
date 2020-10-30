@@ -28,3 +28,7 @@ dependencies:
   version: 0.5.0
   repository: https://confluentinc.github.io/cp-helm-charts/
   alias: kafka
+# https://github.com/helm/charts/tree/master/stable/oauth2-proxy
+- name: oauth2-proxy
+  version: 3.2.3
+  repository: https://charts.helm.sh/stable/
