@@ -56,7 +56,7 @@ consumer:
         - http://data-influxdb.data-influxdb.svc:8086
         database: telegraf
     inputs:
-    - kafka:
+    - kafka_consumer:
         brokers:
         - data-kafka-cp-kafka.data-kafka.svc.cluster.local:9092
         topics:     
