@@ -51,4 +51,10 @@ oauth2-proxy:
     hosts:
     - kafka.play2kiz.com
     annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    tls:
+    - secretName: kafka-oauth2-proxy-tls
+      hosts:
+      - ""
