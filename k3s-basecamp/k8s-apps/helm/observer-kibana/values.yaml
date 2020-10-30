@@ -1,0 +1,12 @@
+---
+kibana:
+  elasticsearchHosts: "http://data-elastic.svc:9200"
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    path: /
+    hosts:
+      - kibana.play2kiz.com
+    tls: []

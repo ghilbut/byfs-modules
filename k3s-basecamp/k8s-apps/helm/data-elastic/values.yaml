@@ -5,3 +5,4 @@ elasticsearch:
   persistence:
     enabled: false
   clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
+  fullnameOverride: elasticsearch
