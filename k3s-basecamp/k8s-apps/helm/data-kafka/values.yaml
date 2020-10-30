@@ -49,7 +49,7 @@ oauth2-proxy:
   ingress:
     enabled: true
     hosts:
-    - kafka.play2kiz.com
+    - ""
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
