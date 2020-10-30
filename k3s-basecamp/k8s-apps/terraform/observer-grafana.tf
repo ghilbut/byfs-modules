@@ -1,26 +1,20 @@
 locals {
-  grafana_database  = "grafana"
-  grafana_username  = "grafana"
+  grafana_mysql_database = "grafana"
+  grafana_mysql_username = "grafana"
   grafana_namespace = "observer-grafana"
 }
 
 
 resource mysql_database grafana {
-  name                  = local.grafana_database
+  name                  = local.grafana_mysql_database
   default_character_set = "utf8mb4"
   default_collation     = "utf8mb4_unicode_ci"
 }
 
-resource random_password grafana_mysql {
-  length = 16
-  special = true
-  override_special = "‘~!@#$%^&*()_-+={}[]/<>,.;?':|"
-}
-
 resource mysql_user grafana {
-  user               = local.grafana_username
+  user               = local.grafana_mysql_username
   host               = "%"
-  plaintext_password = random_password.grafana_mysql.result
+  plaintext_password = var.grafana_mysql_password
 }
 
 resource mysql_grant grafana {
@@ -37,12 +31,6 @@ resource kubernetes_namespace grafana {
   }
 }
 
-resource random_password grafana_admin {
-  length           = 12
-  special          = true
-  override_special = "!@#$%^&*()"
-}
-
 resource kubernetes_secret grafana_admin_secret {
   depends_on = [
     kubernetes_namespace.grafana,
@@ -54,8 +42,8 @@ resource kubernetes_secret grafana_admin_secret {
   }
 
   data = {
-    username = local.grafana_username
-    password = random_password.grafana_admin.result
+    username = "admin"
+    password = var.grafana_admin_password
   }
 
   type = "kubernetes.io/basic-auth"
@@ -72,10 +60,12 @@ resource kubernetes_secret grafana_secret {
   }
 
   data = {
-    GF_AUTH_GITHUB_CLIENT_ID     = var.github_clients.grafana.id
-    GF_AUTH_GITHUB_CLIENT_SECRET = var.github_clients.grafana.secret
-    GF_DATABASE_USER             = local.grafana_username
-    GF_DATABASE_PASSWORD         = random_password.grafana_mysql.result
+    GF_AUTH_GITHUB_CLIENT_ID     = var.grafana_github_client.id
+    GF_AUTH_GITHUB_CLIENT_SECRET = var.grafana_github_client.secret
+    GF_DATABASE_USER             = local.grafana_mysql_username
+    GF_DATABASE_PASSWORD         = var.grafana_mysql_password
+    TELEGRAF_READER_USERNAME     = "admin"
+    TELEGRAF_READER_PASSWORD     = var.influxdb_admin_password
   }
 }
 
@@ -131,7 +121,7 @@ data template_file grafana {
           - name:  grafana.grafana\\.ini.database.host
             value: ${var.mysql_host}:${var.mysql_port}
           - name:  grafana.grafana\\.ini.database.name
-            value: ${local.grafana_database}
+            value: ${local.grafana_mysql_database}
           - name:  grafana.grafana\\.ini.auth\\.github.allowed_organizations
             value: "${join(" ", var.github_orgs)}"
           valueFiles:

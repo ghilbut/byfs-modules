@@ -12,7 +12,7 @@ resource kubernetes_namespace drone {
 resource null_resource drone {
   depends_on = [
     null_resource.argo,
-    kubernetes_secret.g,
+    kubernetes_secret.drone_server_secret,
     kubernetes_secret.drone_runner_secret,
     mysql_database.drone,
     mysql_user.drone,
@@ -98,7 +98,7 @@ resource random_string drone_secrets_plugin_token {
   special = false
 }
 
-resource kubernetes_secret g {
+resource kubernetes_secret drone_server_secret {
   depends_on = [
     kubernetes_namespace.drone,
   ]
@@ -110,8 +110,8 @@ resource kubernetes_secret g {
 
   data = {
     DRONE_DATABASE_DATASOURCE  = local.drone_datasource
-    DRONE_GITHUB_CLIENT_ID     = var.github_clients.drone.id
-    DRONE_GITHUB_CLIENT_SECRET = var.github_clients.drone.secret
+    DRONE_GITHUB_CLIENT_ID     = var.drone_github_client.id
+    DRONE_GITHUB_CLIENT_SECRET = var.drone_github_client.secret
     DRONE_RPC_SECRET           = random_string.drone_rpc_secret.result
   }
 }
@@ -166,14 +166,8 @@ data template_file drone_datasource {
     port = var.mysql_port
     database = local.drone_database
     username = local.drone_username
-    password = random_password.drone_mysql.result
+    password = var.drone_mysql_password
   }
-}
-
-resource random_password drone_mysql {
-  length = 16
-  special = true
-  override_special = "‘~!@#$%^&*()_-+={}[]/<>,.;?':|"
 }
 
 resource mysql_database drone {
@@ -183,7 +177,7 @@ resource mysql_database drone {
 resource mysql_user drone {
   user = local.drone_username
   host = "%"
-  plaintext_password = random_password.drone_mysql.result
+  plaintext_password = var.drone_mysql_password
 }
 
 resource mysql_grant drone {

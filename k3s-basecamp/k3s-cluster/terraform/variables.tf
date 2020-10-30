@@ -38,6 +38,10 @@ variable kubeconfig_path {
   type = string
 }
 
+variable argo_admin_password {
+  type = string
+}
+
 variable argo_github_client_id {
   type = string
 }

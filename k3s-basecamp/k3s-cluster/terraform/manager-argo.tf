@@ -13,13 +13,6 @@ resource kubernetes_namespace argo {
   }
 }
 
-resource random_password argo {
-  length           = 12
-  special          = true
-  override_special = "!@#$%^&*()"
-}
-
-
 data external argo {
   depends_on = [
     null_resource.k3s_cluster,
@@ -27,7 +20,7 @@ data external argo {
 
   program = [
     "${path.module}/scripts/argo.sh",
-    random_password.argo.result,
+    var.argo_admin_password,
   ]
 }
 

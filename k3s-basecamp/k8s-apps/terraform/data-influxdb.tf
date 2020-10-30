@@ -1,4 +1,3 @@
-/*
 locals {
   influxdb_namespace = "data-influxdb"
 }
@@ -12,9 +11,7 @@ resource kubernetes_namespace influxdb {
 resource null_resource influxdb {
   depends_on = [
     kubernetes_namespace.influxdb,
-    kubernetes_persistent_volume.influxdb,
-    kubernetes_persistent_volume_claim.influxdb,
-    kubernetes_secret.influxdb,
+    kubernetes_secret.influxdb_admin,
   ]
   triggers = {
     kubeconfig = var.kubeconfig_path
@@ -54,8 +51,8 @@ data template_file influxdb {
         path: k3s-basecamp/k8s-apps/helm/data-influxdb
         helm:
           parameters:
-          - name:  influxdb.persistence.size
-            value: ${var.ebs_influxdb_size}Gi
+          - name:  influxdb.persistence.existingClaim
+            value: ${kubernetes_persistent_volume_claim.influxdb.metadata[0].name}
           - name:  influxdb.ingress.hostname
             value: influxdb.${var.domain_name}
           valueFiles:
@@ -80,24 +77,6 @@ data template_file influxdb {
 ##  Kubernetes persistent volume for InfluxDB
 ##
 
-resource kubernetes_persistent_volume influxdb {
-  metadata {
-    name = "influxdb-pv"
-  }
-  spec {
-    access_modes = ["ReadWriteOnce"]
-    capacity = {
-      storage = "${var.ebs_influxdb_size}Gi"
-    }
-    persistent_volume_source {
-      aws_elastic_block_store {
-        fs_type   = "ext4"
-        volume_id = var.ebs_influxdb_id
-      }
-    }
-  }
-}
-
 resource kubernetes_persistent_volume_claim influxdb {
   metadata {
     name = "influxdb-pvc"
@@ -107,12 +86,32 @@ resource kubernetes_persistent_volume_claim influxdb {
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = "${var.ebs_influxdb_size}Gi"
+        storage = "${var.influxdb_ebs_volume.size}Gi"
       }
     }
     volume_name = kubernetes_persistent_volume.influxdb.metadata.0.name
+    storage_class_name = "ebs-sc"
   }
   wait_until_bound = true
+}
+
+resource kubernetes_persistent_volume influxdb {
+  metadata {
+    name = "influxdb-pv"
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    capacity = {
+      storage = "${var.influxdb_ebs_volume.size}Gi"
+    }
+    persistent_volume_source {
+      aws_elastic_block_store {
+        fs_type   = "ext4"
+        volume_id = var.influxdb_ebs_volume.id
+      }
+    }
+    storage_class_name = "ebs-sc"
+  }
 }
 
 
@@ -121,13 +120,11 @@ resource kubernetes_persistent_volume_claim influxdb {
 ##  Kubernetes secret for InfluxDB
 ##
 
-resource random_password influxdb_admin {
-  length = 16
-  special = true
-  override_special = "‘~!@#$%^&*()_-+={}[]/<>,.;?':|"
-}
+resource kubernetes_secret influxdb_admin {
+  depends_on = [
+    kubernetes_namespace.influxdb,
+  ]
 
-resource kubernetes_secret influxdb {
   metadata {
     name = "influxdb-auth-secret"
     namespace = kubernetes_namespace.influxdb.metadata[0].name
@@ -135,7 +132,8 @@ resource kubernetes_secret influxdb {
 
   data = {
     influxdb-user = "admin"
-    influxdb-password = random_password.influxdb_admin.result
+    influxdb-password = var.influxdb_admin_password
   }
 }
-*/
+
+

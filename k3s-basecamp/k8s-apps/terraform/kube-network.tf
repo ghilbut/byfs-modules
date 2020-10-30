@@ -1,3 +1,4 @@
+/*
 locals {
   kube_network_namespace = "kube-network"
 }
@@ -122,3 +123,4 @@ data template_file kube_network_issuers {
     EOF
   EOT
 }
+*/

@@ -2,22 +2,12 @@ locals {
   kube_network_namespace = "kube-network"
 }
 
-resource kubernetes_namespace kube_network {
-  depends_on = [
-    null_resource.k3s_cluster,
-  ]
-
-  metadata {
-    name = local.kube_network_namespace
-  }
-}
-
 resource helm_release metallb {
   name       = "metallb"
   chart      = "metallb"
   repository = "https://charts.bitnami.com/bitnami/"
   version    = "0.1.24"
-  namespace  = kubernetes_namespace.kube_network.metadata[0].name
+  namespace  = local.kube_network_namespace
 
   set {
     name  = "fullnameOverride"
@@ -38,6 +28,8 @@ resource helm_release metallb {
     name  = "configInline.address-pools[0].addresses"
     value = "192.168.0.240-192.168.0.250"
   }
+
+  create_namespace = true
 }
 
 resource helm_release ingress_nginx {
@@ -45,7 +37,7 @@ resource helm_release ingress_nginx {
   chart      = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx/"
   version    = "3.7.1"
-  namespace  = kubernetes_namespace.kube_network.metadata[0].name
+  namespace  = local.kube_network_namespace
 
   set {
     name  = "fullnameOverride"
@@ -56,6 +48,8 @@ resource helm_release ingress_nginx {
     name  = "controller.service.externalIPs[0]"
     value = aws_instance.master.private_ip
   }
+
+  create_namespace = true
 }
 
 resource helm_release cert_manager {
@@ -63,7 +57,7 @@ resource helm_release cert_manager {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   version    = "v1.0.2"
-  namespace  = kubernetes_namespace.kube_network.metadata[0].name
+  namespace  = local.kube_network_namespace
 
   set {
     name  = "fullnameOverride"
@@ -74,6 +68,8 @@ resource helm_release cert_manager {
     name  = "installCRDs"
     value = true
   }
+
+  create_namespace = true
 }
 
 resource null_resource cert_manager_cluster_issuer {
