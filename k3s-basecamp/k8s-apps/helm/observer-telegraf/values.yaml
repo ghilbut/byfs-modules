@@ -22,9 +22,39 @@ system:
     - kafka:
         brokers:
         - data-kafka-cp-kafka.data-kafka.svc.cluster.local:9092
-        topic:     "telegraf"
-        client_id: "Telegraf"
-        version:   "2.5.0"
+        topic:     telegraf
+        version:   2.5.0
         compression_codec: 3
         required_acks:     1
+    monitor_self: true
+
+consumer:
+  config:
+    agent:
+      interval: "10s"
+      round_interval: true
+      metric_batch_size: 1000
+      metric_buffer_limit: 10000
+      collection_jitter: "0s"
+      flush_interval: "10s"
+      flush_jitter: "0s"
+      precision: ""
+      debug: false
+      quiet: false
+      logfile: ""
+      hostname: "$HOSTNAME"
+      omit_hostname: false
+    outputs:
+    - influxdb:
+        urls:
+        - http://data-influxdb.data-influxdb.svc:8086
+        database: telegraf
+    inputs:
+    - kafka:
+        brokers:
+        - data-kafka-cp-kafka.data-kafka.svc.cluster.local:9092
+        topics:     
+        - telegraf
+        version:   2.5.0
+        consumer_group: telegraf-consumers
     monitor_self: true
