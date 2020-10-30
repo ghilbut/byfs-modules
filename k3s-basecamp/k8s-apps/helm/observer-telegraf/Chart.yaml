@@ -14,7 +14,7 @@ dependencies:
   alias: system
 
 # https://github.com/influxdata/helm-charts
-- name: telegraf-ds
+- name: telegraf
   version: 1.0.17
   repository: https://helm.influxdata.com/
   alias: consumer
