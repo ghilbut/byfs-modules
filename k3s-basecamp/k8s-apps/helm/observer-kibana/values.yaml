@@ -10,3 +10,11 @@ kibana:
     hosts:
       - kibana.play2kiz.com
     tls: []
+
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "2Gi"
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
