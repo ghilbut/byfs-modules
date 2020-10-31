@@ -1,25 +1,40 @@
 ---
-namespace: data-influxdb
+system:
+  tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+  config:
+    agent:
+      interval: "10s"
+      round_interval: true
+      metric_batch_size: 1000
+      metric_buffer_limit: 10000
+      collection_jitter: "0s"
+      flush_interval: "10s"
+      flush_jitter: "0s"
+      precision: ""
+      debug: false
+      quiet: false
+      logfile: ""
+      hostname: "$HOSTNAME"
+      omit_hostname: false
+    outputs:
+    - kafka:
+        brokers:
+        - data-kafka-cp-kafka.data-kafka.svc:9092
+        topic:     telegraf
+        version:   2.5.0
+        compression_codec: 3
+        required_acks:     1
+    monitor_self: true
 
-blue:
-  persistence:
+consumer:
+  service:
     enabled: false
-  ingress:
-    enabled: true
-    hostname: influxdb.storage.k9etool.io
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: In
-            values:
-            - icloud-kage-prod-worker-1
-  initScripts:
-    enabled: true
-
-telegraf-ds:
+  rbac:
+    create: false
+  serviceAccount:
+    create: false
   config:
     agent:
       interval: "10s"
@@ -38,12 +53,14 @@ telegraf-ds:
     outputs:
     - influxdb:
         urls:
-        - http://data-influxdb-blue.data-influxdb:8086/
-        database: "telegraf"
-        retention_policy: ""
-        timeout: "5s"
-        username: ""
-        password: ""
-        user_agent: "telegraf"
-        insecure_skip_verify: false
+        - http://data-influxdb.data-influxdb.svc:8086
+        database: telegraf
+    inputs:
+    - kafka_consumer:
+        brokers:
+        - data-kafka-cp-kafka.data-kafka.svc:9092
+        topics:     
+        - telegraf
+        version:   2.5.0
+        consumer_group: telegraf-consumers
     monitor_self: true

@@ -1,0 +1,8 @@
+---
+elasticsearch:
+  replicas: 1
+  minimumMasterNodes: 1
+  persistence:
+    enabled: true
+  clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
+  fullnameOverride: elasticsearch

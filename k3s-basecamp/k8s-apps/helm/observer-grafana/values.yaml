@@ -1,0 +1,91 @@
+---
+grafana:
+  extraEmptyDirMounts:
+  - name: data
+    mountPath: /var/lib/grafana/data
+  - name: log
+    mountPath: /var/log/grafana
+  - name: plugins
+    mountPath: /var/lib/grafana/plugins
+  #- name: provisioning
+  #  mountPath: /etc/grafana/provisioning
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "false"
+    hosts: []
+
+  admin:
+    existingSecret: grafana-admin-secret
+    userKey:        username
+    passwordKey:    password
+
+  envFromSecret: grafana-secret
+
+  datasources:
+    # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: influxdb-telegraf
+        type: influxdb
+        #access: proxy
+        database: telegraf
+        user: $TELEGRAF_READER_USERNAME
+        url: http://data-influxdb.data-influxdb.svc.cluster.local:8086
+        isDefault: true
+        jsonData:
+          timeInterval: "10s"
+        secureJsonData:
+          password: $TELEGRAF_READER_PASSWORD
+
+  # https://grafana.com/docs/grafana/latest/administration/configuration/
+  grafana.ini:
+    paths:
+      data: /var/lib/grafana/data
+      logs: /var/log/grafana
+      plugins: /var/lib/grafana/plugins
+      provisioning: /etc/grafana/provisioning
+    server:
+      protocol: ""
+      root_url: ""
+      enable_gzip: true
+    database:
+      type: mysql
+      host: ""
+      name: ""
+      max_idle_conn: 10
+      max_open_conn: 100
+      ssl_mode: false
+    remote_cache:
+      type: memcached
+      connstr: observer-grafana-memcached:11211
+    analytics:
+      check_for_updates: true
+    auth.github:
+      enabled: true
+      allow_sign_up: true
+      scopes: user:email,read:org
+      auth_url:  https://github.com/login/oauth/authorize
+      token_url: https://github.com/login/oauth/access_token
+      api_url:   https://api.github.com/user
+      allowed_organizations: ""
+    log:
+      mode: console
+    log.console:
+      format: json
+    grafana_net:
+      url: https://grafana.net
+
+
+memcached:
+  replicaCount: 1
+  pdbMinAvailable: 1
+
+  memcached:
+    maxItemMemory: 16
+    resources:
+      requests:
+        memory: 16Mi

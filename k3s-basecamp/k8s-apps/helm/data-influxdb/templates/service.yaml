@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+{{- if .Values.influxdb.service.annotations }}
+  annotations:
+{{ toYaml .Values.influxdb.service.annotations | indent 4 }}
+{{- end }}
+  name: influxdb-external-name
+  labels:
+    {{- include "influxdb.labels" . | nindent 4 }}
+spec:
+  type: ExternalName
+  ports:
+  - name: api
+    port: {{ .Values.influxdb.config.http.bind_address | default 8086 }}
+    targetPort: api
+  - name: rpc
+    port: {{ .Values.influxdb.config.rpc.bind_address | default 8088 }}
+    targetPort: rpc
+  {{- if .Values.influxdb.config.graphite.enabled }}
+  - name: graphite
+    port: {{ .Values.influxdb.config.graphite.bind_address | default 2003 }}
+    targetPort: graphite
+  {{- end }}
+  {{- if .Values.influxdb.config.collectd.enabled }}
+  - name: collectd
+    port: {{ .Values.influxdb.config.collectd.bind_address | default 25826 }}
+    protocol: UDP
+    targetPort: collectd
+  {{- end }}
+  {{- if .Values.influxdb.config.udp.enabled }}
+  - name: udp
+    port: {{ .Values.influxdb.config.udp.bind_address | default 8089 }}
+    protocol: UDP
+    targetPort: udp
+  {{- end }}
+  {{- if .Values.influxdb.config.opentsdb.enabled }}
+  - name: opentsdb
+    port: {{ .Values.influxdb.config.opentsdb.bind_address | default 4242 }}
+    targetPort: opentsdb
+  {{- end }}
+  selector:
+    {{- include "influxdb.selectorLabels" . | nindent 4 }}
+  externalName: data-influxdb.{{ .Release.Namespace }}.svc.cluster.local 

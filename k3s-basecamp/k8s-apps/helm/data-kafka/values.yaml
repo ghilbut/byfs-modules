@@ -1,11 +1,60 @@
-cp-helm-charts:
+---
+kafka:
   cp-zookeeper:
-    servers: 3
+    servers: 1
     persistence:
-      enabled: false
+      enabled: true
+      dataDirSize: 1Gi
+      dataLogDirSize: 4Gi
   cp-kafka:
-    brokers: 4
+    brokers: 1
     configurationOverrides:
-
+      "offsets.topic.replication.factor": "1"
+      "default.replication.factor": "1"
+      "min.insync.replicas": "1"
     persistence:
-      enabled: false
+      enabled: true
+      size: 32Gi
+      disksPerBroker: 1
+    prometheus:
+      jmx:
+        enabled: true
+    nodeport:
+      enabled: true
+      servicePort: 19092
+      firstListenerPort: 31090
+  cp-kafka-connect:
+    configurationOverrides:
+      "config.storage.replication.factor": "1"
+      "offset.storage.replication.factor": "1"
+      "status.storage.replication.factor": "1"
+  cp-control-center:
+    configurationOverrides:
+      "replication.factor": "1"
+
+oauth2-proxy:
+  config:
+    existingSecret: kafka-oauth2-secret
+    # https://oauth2-proxy.github.io/oauth2-proxy/configuration#config-file
+    # https://github.com/oauth2-proxy/oauth2-proxy/blob/master/contrib/oauth2-proxy.cfg.example
+    configFile: |-
+      email_domains = [ "*" ]
+      upstreams = [ "http://data-kafka-cp-control-center:9021" ]
+      provider = "github"
+  image:
+    tag: v6.1.1
+  extraEnv:
+  - name:  OAUTH2_PROXY_GITHUB_ORG
+    value: ""
+  ingress:
+    enabled: true
+    hosts:
+    - ""
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    tls:
+    - secretName: kafka-oauth2-proxy-tls
+      hosts:
+      - ""

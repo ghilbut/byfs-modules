@@ -1,15 +1,20 @@
 locals {
-  dashboard_host        = "k3s.${var.domain_name}"
-  kube_system_namespace = "kube-system"
+  telegraf_namespace = "observer-telegraf"
 }
 
-resource null_resource kube_system {
+resource kubernetes_namespace telegraf {
+  metadata {
+    name = local.telegraf_namespace
+  }
+}
+
+resource null_resource telegraf {
   depends_on = [
-    null_resource.argo,
+    kubernetes_namespace.telegraf,
   ]
   triggers = {
     kubeconfig = var.kubeconfig_path
-    sync = data.template_file.kube_system.rendered
+    sync = data.template_file.telegraf.rendered
   }
 
   provisioner local-exec {
@@ -28,51 +33,45 @@ resource null_resource kube_system {
   }
 }
 
-data template_file kube_system {
-  ## https://argoproj.github.io/argo-cd/operator-manual/application.yaml
+data template_file telegraf {
+  # https://argoproj.github.io/argo-cd/operator-manual/application.yaml
   template = <<-EOT
     kubectl --kubeconfig ${var.kubeconfig_path} $METHOD -f - <<EOF
     apiVersion: argoproj.io/v1alpha1
     kind: Application
     metadata:
-      name: kube-system
+      name: observer-telegraf
       namespace: ${local.argo_namespace}
     spec:
       project: default
       source:
         repoURL: ${var.helmchart_url}
         targetRevision: ${var.helmchart_rev}
-        path: k3s-basecamp/k8s-apps/helm/kube-system
+        path: k3s-basecamp/k8s-apps/helm/observer-telegraf
         helm:
           parameters:
-          - name:  dashboard.ingress.hosts[0]
-            value: ${local.dashboard_host}
-          - name:  dashboard.ingress.tls[0].hosts[0]
-            value: ${local.dashboard_host}
+          - name:  consumer.config.outputs[0].influxdb.username
+            value: admin
+          - name:  consumer.config.outputs[0].influxdb.password
+            value: "${var.influxdb_admin_password}"
           valueFiles:
           - values.yaml
           version: v2
       destination:
         server: https://kubernetes.default.svc
-        namespace: ${local.kube_system_namespace}
+        namespace: ${local.telegraf_namespace}
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
         syncOptions:
         - Validate=true
-        - CreateNamespace=true
+      ignoreDifferences:
+      - group: rbac.authorization.k8s.io
+        jsonPointers:
+        - /rules
+        kind: ClusterRole
+        name: influx:telegraf
     EOF
   EOT
-}
-
-data external kubernetes_token {
-  depends_on = [
-    null_resource.kube_system,
-  ]
-
-  program = [
-    "${path.module}/scripts/get_kubernetes_token.sh",
-    var.kubeconfig_path,
-  ]
 }

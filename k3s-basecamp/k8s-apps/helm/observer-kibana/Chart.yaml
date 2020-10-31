@@ -1,0 +1,17 @@
+---
+apiVersion: v2
+name: observer-kibana
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: 1.16.0
+
+dependencies:
+# https://github.com/elastic/helm-charts
+- name: kibana
+  version: 7.9.3
+  repository: https://helm.elastic.co
+# https://github.com/helm/charts/tree/master/stable/oauth2-proxy
+- name: oauth2-proxy
+  version: 3.2.3
+  repository: https://charts.helm.sh/stable/
