@@ -109,6 +109,9 @@ resource kubernetes_secret kafka_oauth2 {
 ##  Kubernetes Persistent Volumes
 ##
 
+##--------------------------------------------------------------
+##  persistent volume claims
+
 resource kubernetes_persistent_volume_claim zookeeper {
   metadata {
     # name: volumeclaimtemplates-name-statefulset-name-replica-index
@@ -164,7 +167,7 @@ resource kubernetes_persistent_volume_claim kafka {
 }
 
 ##--------------------------------------------------------------
-##  persistent volumes for production
+##  persistent volumes
 
 resource kubernetes_persistent_volume zookeeper {
   metadata {

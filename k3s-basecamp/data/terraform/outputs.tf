@@ -56,6 +56,16 @@ output drone_mysql_password {
 }
 
 ##--------------------------------------------------------------
+##  Elasticsearch
+
+output elasticsearch_ebs_volume {
+  value = {
+    id = aws_ebs_volume.elasticsearch.id
+    size = var.ebs_elasticsearch_data_size
+  }
+}
+
+##--------------------------------------------------------------
 ##  Grafana
 
 output grafana_mysql_password {

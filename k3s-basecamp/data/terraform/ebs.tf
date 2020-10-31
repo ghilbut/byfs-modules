@@ -2,6 +2,33 @@ locals {
   az = "${var.aws_region}a"
 }
 
+##--------------------------------------------------------------
+##  Elasticsearch
+
+resource aws_ebs_volume elasticsearch {
+  availability_zone = local.az
+  size = var.ebs_elasticsearch_data_size
+
+  tags = merge({
+    Name = "ebs-basecamp-elasticsearch"
+  }, local.tags)
+}
+
+##--------------------------------------------------------------
+##  InfluxDB
+
+resource aws_ebs_volume influxdb {
+  availability_zone = local.az
+  size = var.ebs_influxdb_data_size
+
+  tags = merge({
+    Name = "ebs-basecamp-influxdb"
+  }, local.tags)
+}
+
+##--------------------------------------------------------------
+##  Kafka
+
 resource aws_ebs_volume zookeeper {
   availability_zone = local.az
   size = var.ebs_zookeeper_data_size
@@ -30,14 +57,8 @@ resource aws_ebs_volume kafka {
   }, local.tags)
 }
 
-resource aws_ebs_volume influxdb {
-  availability_zone = local.az
-  size = var.ebs_influxdb_data_size
-
-  tags = merge({
-    Name = "ebs-basecamp-influxdb"
-  }, local.tags)
-}
+##--------------------------------------------------------------
+##  Kafka
 
 resource aws_ebs_volume vpn {
   availability_zone = local.az
@@ -47,5 +68,3 @@ resource aws_ebs_volume vpn {
     Name = "ebs-basecamp-vpn"
   }, local.tags)
 }
-
-

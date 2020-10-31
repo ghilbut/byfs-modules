@@ -16,6 +16,25 @@ variable mysql_instance {
   default = "db.t2.micro"
 }
 
+##--------------------------------------------------------------
+##  Elasticsearch
+
+variable ebs_elasticsearch_data_size {
+  type = number
+  default = 256
+}
+
+##--------------------------------------------------------------
+##  InfluxDB
+
+variable ebs_influxdb_data_size {
+  type = number
+  default = 16
+}
+
+##--------------------------------------------------------------
+##  Kafka
+
 variable ebs_zookeeper_data_size {
   type = number
   default = 1
@@ -29,9 +48,4 @@ variable ebs_zookeeper_log_size {
 variable ebs_kafka_data_size {
   type = number
   default = 500
-}
-
-variable ebs_influxdb_data_size {
-  type = number
-  default = 16
 }

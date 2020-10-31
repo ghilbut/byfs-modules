@@ -71,6 +71,13 @@ variable drone_mysql_password {
 }
 
 ##----------------------------------------------------------------------
+##  Elasticsearch
+
+variable elasticsearch_ebs_volume {
+  type = object({ id = string, size = number })
+}
+
+##----------------------------------------------------------------------
 ##  Grafana
 
 variable grafana_github_client {

@@ -64,3 +64,47 @@ data template_file elastic {
     EOF
   EOT
 }
+
+
+################################################################
+##
+##  Kubernetes Persistent Volume
+##
+
+resource kubernetes_persistent_volume_claim elasticsearch {
+  metadata {
+    # name: volumeclaimtemplates-name-statefulset-name-replica-index
+    name = "elasticsearch-elasticsearch-0"
+    namespace = kubernetes_namespace.elastic.metadata.0.name
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "${var.elasticsearch_ebs_volume.size}Gi"
+      }
+    }
+    storage_class_name = "ebs-sc"
+    volume_name = kubernetes_persistent_volume.elasticsearch.metadata[0].name
+  }
+}
+
+resource kubernetes_persistent_volume elasticsearch {
+  metadata {
+    name = "elasticsearch-0"
+  }
+
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    capacity = {
+      storage = "${var.elasticsearch_ebs_volume.size}Gi"
+    }
+    persistent_volume_source {
+      aws_elastic_block_store {
+        fs_type   = "ext4"
+        volume_id = var.elasticsearch_ebs_volume.id
+      }
+    }
+    storage_class_name = "ebs-sc"
+  }
+}
