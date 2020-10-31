@@ -19,19 +19,6 @@ resource null_resource k3s_cluster {
     content = <<-EOC
       #!/bin/sh -eux
       export K3S_KUBECONFIG_MODE=400
-      #export INSTALL_K3S_EXEC='
-      #   --disable-cloud-controller
-      #   --disable local-storage
-      #   --disable servicelb
-      #   --disable traefik
-      #   --kube-apiserver-arg allow-privileged=true
-      #   --kube-apiserver-arg cloud-provider=external
-      #   --kube-apiserver-arg feature-gates=CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true,VolumeSnapshotDataSource=true
-      #   --kube-controller-arg cloud-provider=external
-      #   --kubelet-arg cloud-provider=external
-      #   --kubelet-arg feature-gates=CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true
-      #   --kubelet-arg provider-id="aws:///$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)/$(curl -s http://169.254.169.254/latest/meta-data/instance-id)"
-      #   --token ${random_uuid.token.result}'
       curl https://releases.rancher.com/install-docker/19.03.sh | sh
       curl -sfL https://get.k3s.io | sh -s - server \
            --disable-cloud-controller \
@@ -45,6 +32,10 @@ resource null_resource k3s_cluster {
            --kube-controller-arg cloud-provider=external \
            --kubelet-arg feature-gates=CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true,CSIMigration=true,CSIMigrationAWS=true \
            --token ${random_uuid.token.result}
+
+         # --kubelet-arg cloud-provider=external \
+         # --kubelet-arg provider-id="aws:///$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)/$(curl -s http://169.254.169.254/latest/meta-data/instance-id)" \
+
       sudo chown ubuntu:ubuntu /etc/rancher/k3s/k3s.yaml
     EOC
     destination = "/home/ubuntu/install-k3s-cluster.sh"
