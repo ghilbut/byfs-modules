@@ -28,7 +28,7 @@ variable ebs_zookeeper_log_size {
 
 variable ebs_kafka_data_size {
   type = number
-  default = 32
+  default = 500
 }
 
 variable ebs_influxdb_data_size {

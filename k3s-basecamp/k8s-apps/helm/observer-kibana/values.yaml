@@ -3,7 +3,7 @@ kibana:
   elasticsearchHosts: "http://elasticsearch.data-elastic.svc:9200"
   resources:
     requests:
-      cpu: "500m"
+      cpu: "1000m"
       memory: "2Gi"
     limits:
       cpu: "1000m"

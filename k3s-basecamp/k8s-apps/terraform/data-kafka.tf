@@ -84,7 +84,7 @@ data template_file kafka {
 ##  Kubernetes ConfigMap and Secret
 ##
 
-resource random_string oauth2_cookie_secret {
+resource random_string kafka_oauth2_cookie_secret {
   length = 32
   upper = false
   special = false
@@ -99,7 +99,7 @@ resource kubernetes_secret kafka_oauth2 {
   data = {
     client-id = var.kafka_github_client.id
     client-secret = var.kafka_github_client.secret
-    cookie-secret = random_string.oauth2_cookie_secret.result
+    cookie-secret = random_string.kafka_oauth2_cookie_secret.result
   }
 }
 

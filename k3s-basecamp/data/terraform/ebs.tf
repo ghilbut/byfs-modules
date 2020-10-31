@@ -23,7 +23,7 @@ resource aws_ebs_volume zookeeper_log {
 resource aws_ebs_volume kafka {
   availability_zone = local.az
   size = var.ebs_kafka_data_size
-  #type = "st1"
+  type = "st1"
 
   tags = merge({
     Name = "ebs-basecamp-kafka"
