@@ -4,10 +4,5 @@ elasticsearch:
   minimumMasterNodes: 1
   persistence:
     enabled: true
-  volumeClaimTemplate:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 256Gi
+  clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
   fullnameOverride: elasticsearch
