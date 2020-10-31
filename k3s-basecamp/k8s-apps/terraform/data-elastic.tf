@@ -49,6 +49,9 @@ data template_file elastic {
         targetRevision: ${var.helmchart_rev}
         path: k3s-basecamp/k8s-apps/helm/data-elastic
         helm:
+          parameters:
+          - name:  elasticsearch.volumeClaimTemplate.resources.requests.storage
+            value: ${var.elasticsearch_ebs_volume.size}Gi
           valueFiles:
           - values.yaml
           version: v2
