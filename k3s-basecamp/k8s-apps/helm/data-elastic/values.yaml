@@ -2,11 +2,12 @@
 elasticsearch:
   replicas: 1
   minimumMasterNodes: 1
+  persistence:
+    enabled: true
   volumeClaimTemplate:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 256Gi
-
   fullnameOverride: elasticsearch
