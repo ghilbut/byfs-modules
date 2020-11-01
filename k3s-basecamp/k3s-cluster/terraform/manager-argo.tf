@@ -57,6 +57,11 @@ resource helm_release argo {
     value = local.argo_host
   }
 
+  set {
+    name  = "server.ingress.tls[0].hosts[0]"
+    value = local.argo_host
+  }
+
   set_sensitive {
     name  = "configs.secret.argocdServerAdminPassword"
     value = data.external.argo.result.encpw
