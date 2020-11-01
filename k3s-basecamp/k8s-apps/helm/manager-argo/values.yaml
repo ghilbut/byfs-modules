@@ -37,7 +37,7 @@ argo-cd:
             clientID: $dex.github.clientID
             clientSecret: $dex.github.clientSecret
             orgs:
-            - $dex.github.org
+            - name: $dex.github.org
     ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
     rbacConfig:
       policy.default: role:readonly
