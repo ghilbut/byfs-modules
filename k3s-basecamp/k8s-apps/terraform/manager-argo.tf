@@ -42,12 +42,12 @@ data template_file argo {
         path: k3s-basecamp/k8s-apps/helm/manager-argo
         helm:
           parameters:
-          - name:  cd.server.ingress.hosts[0]
+          - name:  argo-cd.server.ingress.hosts[0]
             value: ${local.argo_host}
-          - name:  cd.server.ingress.tls[0].hosts[0]
+          - name:  argo-cd.server.ingress.tls[0].hosts[0]
             value: ${local.argo_host}
-          - name:  cd.server.config.url
-            value: http://${local.argo_host}
+          - name:  argo-cd.server.config.url
+            value: https://${local.argo_host}
           valueFiles:
           - values.yaml
           version: v2
