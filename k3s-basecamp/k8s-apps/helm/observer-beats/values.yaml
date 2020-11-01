@@ -58,6 +58,7 @@ logstash:
       input {
         kafka {
           bootstrap_servers => "data-kafka-cp-kafka-0.data-kafka-cp-kafka-headless.data-kafka.svc.cluster.local:9092"
+          codec => json
           consumer_threads => 1
           decorate_events => true
           topics => [ "apm", "filebeat" ]
