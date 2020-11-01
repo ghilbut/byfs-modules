@@ -47,10 +47,11 @@ filebeat:
           - http://elasticsearch.data-elastic.svc.cluster.local:9200
 
 logstash:
-  logstashConfig: {}
-  #  logstash.yml: |
-  #    key:
-  #      nestedkey: value
+  logstashConfig:
+    logstash.yml: |
+      #key:
+      #  nestedkey: value
+      xpack.monitoring.elasticsearch.hosts: http://elasticsearch.data-elastic.svc.cluster.local:9200
   #  log4j2.properties: |
   #    key = value
   logstashPipeline:
