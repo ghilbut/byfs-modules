@@ -52,7 +52,7 @@ logstash:
   logstashConfig:
     logstash.yml: |
       # ---------------- X-Pack ------------------
-      xpack.monitoring.elasticsearch.url: http://elasticsearch.data-elastic.svc.cluster.local:9200
+      xpack.monitoring.elasticsearch.hosts: http://elasticsearch.data-elastic.svc.cluster.local:9200
       #xpack.monitoring.elasticsearch.username:
       #xpack.monitoring.elasticsearch.password:
     # log4j2.properties: |
