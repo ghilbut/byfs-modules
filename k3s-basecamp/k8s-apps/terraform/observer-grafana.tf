@@ -116,8 +116,6 @@ data template_file grafana {
             value: grafana.${var.domain_name}
           - name:  grafana.ingress.tls[0].hosts[0]
             value: grafana.${var.domain_name}
-          - name:  grafana.grafana\\.ini.server.protocol
-            value: http
           - name:  grafana.grafana\\.ini.server.root_url
             value: https://grafana.${var.domain_name}
           - name:  grafana.grafana\\.ini.database.host
