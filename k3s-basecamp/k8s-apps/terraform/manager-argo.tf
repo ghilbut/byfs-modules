@@ -44,6 +44,8 @@ data template_file argo {
           parameters:
           - name:  cd.server.ingress.hosts[0]
             value: ${local.argo_host}
+          - name:  cd.server.ingress.tls[0].hosts[0]
+            value: ${local.argo_host}
           - name:  cd.server.config.url
             value: http://${local.argo_host}
           valueFiles:
