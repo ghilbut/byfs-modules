@@ -119,7 +119,7 @@ data template_file grafana {
           - name:  grafana.grafana\\.ini.server.protocol
             value: http
           - name:  grafana.grafana\\.ini.server.root_url
-            value: http://grafana.${var.domain_name}
+            value: https://grafana.${var.domain_name}
           - name:  grafana.grafana\\.ini.database.host
             value: ${var.mysql_host}:${var.mysql_port}
           - name:  grafana.grafana\\.ini.database.name
