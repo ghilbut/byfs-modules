@@ -12,8 +12,6 @@ apm-server:
         version: 2.0.0
         topic: apm
         compression: lz4
-      xpack.monitoring.enabled: true
-      xpack.monitoring.elasticsearch: http://elasticsearch.data-elastic.svc.cluster.local:9200
   ingress:
     enabled: true
     annotations:
@@ -50,13 +48,12 @@ filebeat:
 
 logstash:
   logstashConfig:
-    logstash.yml: |
-      # ---------------- X-Pack ------------------
-      xpack.monitoring.elasticsearch.hosts: http://elasticsearch.data-elastic.svc.cluster.local:9200
-      #xpack.monitoring.elasticsearch.username:
-      #xpack.monitoring.elasticsearch.password:
-    # log4j2.properties: |
-    #   key = value
+    logstash.yml: {}
+    #  logstash.yml: |
+    #    key:
+    #      nestedkey: value
+    #  log4j2.properties: |
+    #    key = value
   logstashPipeline:
     logstash.conf: |
       input {
