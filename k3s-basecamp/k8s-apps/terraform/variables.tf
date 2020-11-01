@@ -1,3 +1,12 @@
+variable aws_region {
+  type = string
+}
+
+variable aws_s3_endpoint {
+  type = string
+}
+
+
 variable domain_name {
   type = string
 }
@@ -29,10 +38,6 @@ variable mysql_port {
 variable github_orgs {
   type = list(string)
   default = []
-}              
-
-variable drone_repository_filter {
-  type = string
 }
 
 
@@ -60,6 +65,25 @@ variable dashboard_github_client {
 }
 
 ##----------------------------------------------------------------------
+##  Docker-Registry
+
+variable docker_github_client {
+  type = object({ id = string, secret = string })
+}
+
+variable docker_registry_s3_bucket {
+  type = string
+}
+
+variable docker_registry_access_key {
+  type = string
+}
+
+variable docker_registry_secret_key {
+  type = string
+}
+
+##----------------------------------------------------------------------
 ##  Drone CI
 
 variable drone_github_client {
@@ -67,6 +91,10 @@ variable drone_github_client {
 }
 
 variable drone_mysql_password {
+  type = string
+}
+
+variable drone_repository_filter {
   type = string
 }
 
