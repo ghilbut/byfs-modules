@@ -21,6 +21,6 @@ spec:
         - containerPort: 8080
         env:
         - name:  REGISTRY_NAME
-          value: data-docker-registry.svc:5000
+          value: private docker registry
         - name:  REGISTRY_URL
-          value: http://data-docker-registry.svc:5000
+          value: http://data-docker-registry.svc.cluster.local:5000
