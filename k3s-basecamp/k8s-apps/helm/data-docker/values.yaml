@@ -1,0 +1,9 @@
+---
+registry:
+  storage: s3
+  s3:
+    region: ""
+    regionEndpoint: ""
+    bucket: ""
+    encrypt: true
+    secure:  true
