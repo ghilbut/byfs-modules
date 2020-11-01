@@ -1,9 +1,13 @@
 ---
 registry:
   storage: s3
+  secrets:
+    s3:
+      accessKey: ""
+      secretKey: ""
   s3:
     region: ""
     regionEndpoint: ""
     bucket: ""
     encrypt: true
-    secure:  true
+    secure:  false
