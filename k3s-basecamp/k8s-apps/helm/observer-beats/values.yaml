@@ -5,9 +5,16 @@ apm-server:
       apm-server:
         host: "0.0.0.0:8200"
       queue: {}
-      output.elasticsearch:
+      output.kafka:
+        enabled: true
         hosts:
-        - http://elasticsearch.data-elastic.svc.cluster.local:9200
+        - data-kafka-cp-kafka-0.data-kafka-cp-kafka-headless.data-kafka.svc.cluster.local:9092
+        version: 2.0.0
+        topic: apm
+        codec: json
+        compression: lz4
+      xpack.monitoring.enabled: true
+      xpack.monitoring.elasticsearch: http://elasticsearch.data-elastic.svc.cluster.local:9200
   ingress:
     enabled: true
     annotations:
@@ -36,6 +43,11 @@ filebeat:
         version: 2.0.0
         topic: filebeat
         compression: lz4
+      monitoring:
+        enabled: true
+        elasticsearch:
+          hosts:
+          - http://elasticsearch.data-elastic.svc.cluster.local:9200
 
 logstash:
   logstashConfig:
@@ -53,7 +65,7 @@ logstash:
           bootstrap_servers => "data-kafka-cp-kafka-0.data-kafka-cp-kafka-headless.data-kafka.svc.cluster.local:9092"
           consumer_threads => 1
           decorate_events => true
-          topics => [ "filebeat" ]
+          topics => [ "apm", "filebeat" ]
         }
       }
       filter {
@@ -62,6 +74,14 @@ logstash:
         }
       }
       output {
+        if [@metadata][kafka][topic] == "apm" {
+          elasticsearch {
+            hosts => "elasticsearch.data-elastic.svc.cluster.local"
+            manage_template => false
+            index => "apm-%{+YYYY.MM.dd}"
+            timeout => 60
+          }
+        }
         if [@metadata][kafka][topic] == "filebeat" {
           elasticsearch {
             hosts => "elasticsearch.data-elastic.svc.cluster.local"

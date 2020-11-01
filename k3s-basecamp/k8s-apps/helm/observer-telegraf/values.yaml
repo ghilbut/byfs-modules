@@ -21,7 +21,7 @@ system:
     outputs:
     - kafka:
         brokers:
-        - data-kafka-cp-kafka.data-kafka.svc:9092
+        - data-kafka-cp-kafka-0.data-kafka-cp-kafka-headless.data-kafka.svc.cluster.local:9092
         topic:     telegraf
         version:   2.5.0
         compression_codec: 3
@@ -58,7 +58,7 @@ consumer:
     inputs:
     - kafka_consumer:
         brokers:
-        - data-kafka-cp-kafka.data-kafka.svc:9092
+        - data-kafka-cp-kafka-0.data-kafka-cp-kafka-headless.data-kafka.svc.cluster.local:9092
         topics:     
         - telegraf
         version:   2.5.0
