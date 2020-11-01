@@ -57,7 +57,7 @@ data template_file kafka {
           - name:  kafka.cp-kafka.persistence.size
             value: ${var.kafka_ebs_volume.size}Gi
           - name:  oauth2-poxy.extraEnv[0].value
-            value: "${var.github_orgs[0]}"
+            value: "${var.github_org}"
           - name:  oauth2-proxy.ingress.hosts[0]
             value: kafka.${var.domain_name}
           - name:  oauth2-proxy.ingress.tls[0].hosts[0]

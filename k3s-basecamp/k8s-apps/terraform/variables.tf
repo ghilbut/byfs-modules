@@ -35,9 +35,8 @@ variable mysql_port {
   type = number
 }
 
-variable github_orgs {
-  type = list(string)
-  default = []
+variable github_org {
+  type = string
 }
 
 

@@ -123,7 +123,7 @@ data template_file grafana {
           - name:  grafana.grafana\\.ini.database.name
             value: ${local.grafana_mysql_database}
           - name:  grafana.grafana\\.ini.auth\\.github.allowed_organizations
-            value: "${join(" ", var.github_orgs)}"
+            value: "${var.github_org}"
           valueFiles:
           - values.yaml
           version: v2

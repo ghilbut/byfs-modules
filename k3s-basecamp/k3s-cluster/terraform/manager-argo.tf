@@ -76,4 +76,9 @@ resource helm_release argo {
     name  = "configs.secret.extra.dex\\.github\\.clientSecret"
     value = var.argo_github_client_secret
   }
+
+  set_sensitive {
+    name  = "configs.secret.extra.dex\\.github\\.org"
+    value = var.argo_github_org
+  }
 }

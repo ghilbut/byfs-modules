@@ -61,7 +61,7 @@ data template_file docker {
           - name:  registry.s3.bucket
             value: ${var.docker_registry_s3_bucket}
           - name:  oauth2-poxy.extraEnv[0].value
-            value: "${var.github_orgs[0]}"
+            value: "${var.github_org}"
           - name:  oauth2-proxy.ingress.hosts[0]
             value: docker.${var.domain_name}
           - name:  oauth2-proxy.ingress.tls[0].hosts[0]

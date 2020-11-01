@@ -49,3 +49,7 @@ variable argo_github_client_id {
 variable argo_github_client_secret {
   type = string
 }
+
+variable argo_github_org {
+  type = string
+}

@@ -51,7 +51,7 @@ data template_file kibana {
         helm:
           parameters:
           - name:  oauth2-poxy.extraEnv[0].value
-            value: "${var.github_orgs[0]}"
+            value: "${var.github_org}"
           - name:  oauth2-proxy.ingress.hosts[0]
             value: kibana.${var.domain_name}
           - name:  oauth2-proxy.ingress.tls[0].hosts[0]
