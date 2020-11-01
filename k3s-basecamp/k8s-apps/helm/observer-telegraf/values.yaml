@@ -62,5 +62,5 @@ consumer:
         topics:     
         - telegraf
         version:   2.5.0
-        consumer_group: telegraf-consumers
+        consumer_group: telegraf
     monitor_self: true
