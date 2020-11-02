@@ -1,20 +1,22 @@
 locals {
-  kibana_namespace = "observer-kibana"
+  dashboard_host2          = "k8s.${var.domain_name}"
+  kube_dashboard_namespace = "kube-dashboard"
 }
 
-resource kubernetes_namespace kibana {
+resource kubernetes_namespace kube_dashboard {
   metadata {
-    name = local.kibana_namespace
+    name = local.kube_dashboard_namespace
   }
 }
 
-resource null_resource kibana {
+resource null_resource kube_dashboard {
   depends_on = [
-    kubernetes_namespace.kibana,
+    null_resource.argo,
+    kubernetes_namespace.kube_dashboard,
   ]
   triggers = {
     kubeconfig = var.kubeconfig_path
-    sync = data.template_file.kibana.rendered
+    sync = data.template_file.kube_dashboard.rendered
   }
 
   provisioner local-exec {
@@ -33,41 +35,46 @@ resource null_resource kibana {
   }
 }
 
-data template_file kibana {
-  # https://argoproj.github.io/argo-cd/operator-manual/application.yaml
+data template_file kube_dashboard {
+  ## https://argoproj.github.io/argo-cd/operator-manual/application.yaml
   template = <<-EOT
     kubectl --kubeconfig ${var.kubeconfig_path} $METHOD -f - <<EOF
     apiVersion: argoproj.io/v1alpha1
     kind: Application
     metadata:
-      name: observer-kibana
+      name: kube-dashboard
       namespace: ${local.argo_namespace}
     spec:
       project: default
       source:
         repoURL: ${var.helmchart_url}
         targetRevision: ${var.helmchart_rev}
-        path: k3s-basecamp/k8s-apps/helm/observer-kibana
+        path: k3s-basecamp/k8s-apps/helm/kube-dashboard
         helm:
           parameters:
-          - name:  oauth2-poxy.extraEnv[0].value
-            value: "${var.github_org}"
+          - name:  dashboard.ingress.hosts[0]
+            value: ${local.dashboard_host2}
+          #- name:  dashboard.ingress.tls[0].hosts[0]
+          #  value: ${local.dashboard_host2}
+          - name:  oauth2-proxy.extraEnv[0].value
+            value: ${var.github_org}
           - name:  oauth2-proxy.ingress.hosts[0]
-            value: kibana.${var.domain_name}
+            value: ${local.dashboard_host2}
           - name:  oauth2-proxy.ingress.tls[0].hosts[0]
-            value: kibana.${var.domain_name}
+            value: ${local.dashboard_host2}
           valueFiles:
           - values.yaml
           version: v2
       destination:
         server: https://kubernetes.default.svc
-        namespace: ${local.kibana_namespace}
+        namespace: ${kubernetes_namespace.kube_dashboard.metadata[0].name}
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
         syncOptions:
         - Validate=true
+        - CreateNamespace=true
     EOF
   EOT
 }
@@ -78,21 +85,21 @@ data template_file kibana {
 ##  Kubernetes Secret
 ##
 
-resource random_string kibana_oauth2_cookie_secret {
+resource random_string kube_dashboard_oauth2_cookie_secret {
   length = 32
   upper = false
   special = false
 }
 
-resource kubernetes_secret kibana_oauth2 {
+resource kubernetes_secret kube_dashboard_oauth2 {
   metadata {
-    name = "kibana-oauth2-secret"
-    namespace = kubernetes_namespace.kibana.metadata[0].name
+    name = "kube-dashboard-oauth2-secret"
+    namespace = kubernetes_namespace.kube_dashboard.metadata[0].name
   }
 
   data = {
     client-id = var.kibana_github_client.id
     client-secret = var.kibana_github_client.secret
-    cookie-secret = random_string.kibana_oauth2_cookie_secret.result
+    cookie-secret = random_string.kube_dashboard_oauth2_cookie_secret.result
   }
 }

@@ -1,0 +1,50 @@
+---
+dashboard:
+  extraArgs:
+  - --enable-insecure-login
+  ingress:
+    enabled: true
+    annotations:
+      #cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "false"
+      #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+      nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+    paths:
+    - /
+    hosts:
+    - ""
+    tls: []
+    #- hosts:
+    #  - ""
+    #  secretName: kubernetes-dashboard-tls
+
+oauth2-proxy:
+  config:
+    existingSecret: kubedashboard-oauth2-secret
+    # https://oauth2-proxy.github.io/oauth2-proxy/configuration#config-file
+    # https://github.com/oauth2-proxy/oauth2-proxy/blob/master/contrib/oauth2-proxy.cfg.example
+    configFile: |-
+      email_domains = [ "*" ]
+      upstreams = [ "file:///dev/null" ]
+      provider = "github"
+  image:
+    tag: v6.1.1
+  extraEnv:
+  - name:  OAUTH2_PROXY_GITHUB_ORG
+    value: ""
+  ingress:
+    enabled: true
+    path: /oauth2
+    hosts:
+    - ""
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    tls:
+    - secretName: kubernetes-dashboard-tls
+      hosts:
+      - ""
