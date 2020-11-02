@@ -49,6 +49,14 @@ data template_file kube_system {
             value: ${local.dashboard_host}
           - name:  dashboard.ingress.tls[0].hosts[0]
             value: ${local.dashboard_host}
+
+          - name:  oauth2-proxy.extraEnv[0].value
+            value: ${var.github_org}
+          - name:  oauth2-proxy.ingress.hosts[0]
+            value: ${local.dashboard_host}
+          - name:  oauth2-proxy.ingress.tls[0].hosts[0]
+            value: ${local.dashboard_host}
+
           valueFiles:
           - values.yaml
           version: v2
@@ -75,4 +83,29 @@ data external kubernetes_token {
     "${path.module}/scripts/get_kubernetes_token.sh",
     var.kubeconfig_path,
   ]
+}
+
+
+################################################################
+##
+##  Kubernetes Secret
+##
+
+resource random_string kube_dashboard_oauth2_cookie_secret_x {
+  length = 32
+  upper = false
+  special = false
+}
+
+resource kubernetes_secret kube_dashboard_oauth2_x {
+  metadata {
+    name = "kube-dashboard-oauth2-secret"
+    namespace = local.kube_system_namespace
+  }
+
+  data = {
+    client-id = var.dashboard_github_client.id
+    client-secret = var.dashboard_github_client.secret
+    cookie-secret = random_string.kube_dashboard_oauth2_cookie_secret_x.result
+  }
 }
