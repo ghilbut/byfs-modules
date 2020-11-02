@@ -98,8 +98,8 @@ resource kubernetes_secret kube_dashboard_oauth2 {
   }
 
   data = {
-    client-id = var.kibana_github_client.id
-    client-secret = var.kibana_github_client.secret
+    client-id = var.dashboard_github_client.id
+    client-secret = var.dashboard_github_client.secret
     cookie-secret = random_string.kube_dashboard_oauth2_cookie_secret.result
   }
 }
