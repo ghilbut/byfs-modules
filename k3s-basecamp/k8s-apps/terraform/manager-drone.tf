@@ -58,6 +58,8 @@ data template_file drone {
           parameters:
           - name:  server.ingress.hosts[0].host
             value: ${local.drone_host}
+          - name:  server.ingress.tls[0].hosts[0]
+            value: ${local.drone_host}
           - name:  server.env.DRONE_REPOSITORY_FILTER
             value: ${var.drone_repository_filter}
           - name:  server.env.DRONE_SERVER_PROXY_HOST

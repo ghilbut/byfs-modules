@@ -1,28 +1,33 @@
 ---
-kibana:
-  elasticsearchHosts: "http://elasticsearch.data-elastic.svc:9200"
-  resources:
-    requests:
-      cpu: "1000m"
-      memory: "2Gi"
-    limits:
-      cpu: "1000m"
-      memory: "2Gi"
+registry:
+  storage: s3
+  secrets:
+    s3:
+      accessKey: ""
+      secretKey: ""
+  s3:
+    region: ""
+    regionEndpoint: ""
+    bucket: ""
+    encrypt: true
+    secure:  true
 
 oauth2-proxy:
   config:
-    existingSecret: kibana-oauth2-secret
+    existingSecret: docker-registry-web-oauth2-secret
     # https://oauth2-proxy.github.io/oauth2-proxy/configuration#config-file
     # https://github.com/oauth2-proxy/oauth2-proxy/blob/master/contrib/oauth2-proxy.cfg.example
     configFile: |-
       email_domains = [ "*" ]
-      upstreams = [ "http://observer-kibana-kibana:5601" ]
+      upstreams = [ "http://registry-web.data-docker.svc.cluster.local:8080" ]
       provider = "github"
   image:
     tag: v6.1.1
   extraEnv:
   - name:  OAUTH2_PROXY_GITHUB_ORG
     value: ""
+  service:
+    port: 8080
   ingress:
     enabled: true
     hosts:
@@ -32,6 +37,6 @@ oauth2-proxy:
       kubernetes.io/ingress.class: nginx
       # nginx.ingress.kubernetes.io/ssl-redirect: "false"
     tls:
-    - secretName: kibana-oauth2-proxy-tls
+    - secretName: docker-registry-web-oauth2-proxy-tls
       hosts:
       - ""

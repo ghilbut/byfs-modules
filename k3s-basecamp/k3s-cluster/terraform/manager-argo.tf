@@ -57,6 +57,11 @@ resource helm_release argo {
     value = local.argo_host
   }
 
+  set {
+    name  = "server.ingress.tls[0].hosts[0]"
+    value = local.argo_host
+  }
+
   set_sensitive {
     name  = "configs.secret.argocdServerAdminPassword"
     value = data.external.argo.result.encpw
@@ -75,5 +80,10 @@ resource helm_release argo {
   set_sensitive {
     name  = "configs.secret.extra.dex\\.github\\.clientSecret"
     value = var.argo_github_client_secret
+  }
+
+  set_sensitive {
+    name  = "configs.secret.extra.dex\\.github\\.org"
+    value = var.argo_github_org
   }
 }

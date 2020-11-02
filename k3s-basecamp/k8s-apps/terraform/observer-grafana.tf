@@ -114,16 +114,16 @@ data template_file grafana {
           parameters:
           - name:  grafana.ingress.hosts[0]
             value: grafana.${var.domain_name}
-          - name:  grafana.grafana\\.ini.server.protocol
-            value: http
+          - name:  grafana.ingress.tls[0].hosts[0]
+            value: grafana.${var.domain_name}
           - name:  grafana.grafana\\.ini.server.root_url
-            value: http://grafana.${var.domain_name}
+            value: https://grafana.${var.domain_name}
           - name:  grafana.grafana\\.ini.database.host
             value: ${var.mysql_host}:${var.mysql_port}
           - name:  grafana.grafana\\.ini.database.name
             value: ${local.grafana_mysql_database}
           - name:  grafana.grafana\\.ini.auth\\.github.allowed_organizations
-            value: "${join(" ", var.github_orgs)}"
+            value: "${var.github_org}"
           valueFiles:
           - values.yaml
           version: v2

@@ -10,7 +10,7 @@ resource aws_instance master {
   ebs_optimized                        = true
   iam_instance_profile                 = aws_iam_instance_profile.basecamp.name
   instance_initiated_shutdown_behavior = "terminate"
-  instance_type                        = "m5.xlarge"
+  instance_type                        = "r5.xlarge"
   key_name                             = var.private_key_name
   root_block_device {
     delete_on_termination = true

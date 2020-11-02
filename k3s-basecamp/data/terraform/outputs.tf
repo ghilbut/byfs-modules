@@ -48,6 +48,21 @@ output argo_admin_password {
 }
 
 ##--------------------------------------------------------------
+##  Docker-Registry
+
+output docker_registry_s3_bucket {
+  value = aws_s3_bucket.docker.id
+}
+
+output docker_registry_access_key {
+  value = aws_iam_access_key.docker.id
+}
+
+output docker_registry_secret_key {
+  value = aws_iam_access_key.docker.secret
+}
+
+##--------------------------------------------------------------
 ##  Drone CI
 
 output drone_mysql_password {

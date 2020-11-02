@@ -1,5 +1,5 @@
 ---
-cd:
+argo-cd:
   installCRDs: true
   server:
     extraArgs:
@@ -7,10 +7,10 @@ cd:
     ingress:
       enabled: true
       annotations:
-        #cert-manager.io/cluster-issuer: letsencrypt
+        cert-manager.io/cluster-issuer: letsencrypt
         kubernetes.io/ingress.class: nginx
-        #kubernetes.io/tls-acme: "true"
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        # kubernetes.io/tls-acme: "true"
+        # nginx.ingress.kubernetes.io/ssl-redirect: "false"
       hosts:
       - ""
       paths:
@@ -20,9 +20,10 @@ cd:
         backend:
           serviceName: manager-argo-argocd-dex-server
           servicePort: 5556
-      #tls:
-      #- hosts: []
-      #  secretName: manager-argo-tls
+      tls:
+      - hosts:
+        - ""
+        secretName: argo-tls
     config:
       url: ""
       repositories: |
@@ -35,7 +36,8 @@ cd:
           config:
             clientID: $dex.github.clientID
             clientSecret: $dex.github.clientSecret
-            orgs: []
+            orgs:
+            - name: $dex.github.org
     ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
     rbacConfig:
       policy.default: role:readonly

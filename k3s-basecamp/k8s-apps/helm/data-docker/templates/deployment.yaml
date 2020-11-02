@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-web
+  labels:
+    app: registry-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-web
+  template:
+    metadata:
+      labels:
+        app: registry-web
+    spec:
+      containers:
+      - name: registry-web
+        image: hyper/docker-registry-web:v0.1.2
+        ports:
+        - containerPort: 8080
+        env:
+        - name:  REGISTRY_NAME
+          value: private docker registry
+        - name:  REGISTRY_URL
+          value: http://data-docker-registry.data-docker.svc.cluster.local:5000

@@ -11,4 +11,3 @@ dependencies:
 - name: argo-cd
   version: 2.9.3
   repository: https://argoproj.github.io/argo-helm
-  alias: cd
