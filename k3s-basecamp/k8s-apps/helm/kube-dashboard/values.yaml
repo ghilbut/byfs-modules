@@ -1,7 +1,10 @@
 ---
 dashboard:
-  #extraArgs:
+  extraArgs:
   #- --enable-insecure-login
+  - --enable-skip-login
+  - --disable-settings-authorizer        
+  - --auto-generate-certificates
   ingress:
     enabled: true
     annotations:
