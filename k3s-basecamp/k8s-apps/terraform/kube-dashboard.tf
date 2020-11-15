@@ -86,6 +86,17 @@ data template_file kube_dashboard {
   EOT
 }
 
+data external kubernetes_token {
+  depends_on = [
+    null_resource.kube_dashboard,
+  ]
+
+  program = [
+    "${path.module}/scripts/get_kubernetes_token.sh",
+    var.kubeconfig_path,
+  ]
+}
+
 
 ################################################################
 ##
