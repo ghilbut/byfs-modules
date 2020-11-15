@@ -37,7 +37,7 @@ spec:
           envFrom:
           {{- range .Values.extension.extraSecretNamesForEnvFrom }}
           - secretRef:
-            name: {{ . }}
+              name: {{ . }}
           {{- end }}
           ports:
             - name: http

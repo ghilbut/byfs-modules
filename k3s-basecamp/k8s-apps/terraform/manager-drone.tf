@@ -69,7 +69,7 @@ data template_file drone {
           - name:  secrets.env.SECRET_KEY
             value: x
 
-          - name:  extention.extraSecretNamesForEnvFrom[0]
+          - name:  extension.extraSecretNamesForEnvFrom[0]
             value: ${kubernetes_secret.drone_convert_plugin_secret.metadata[0].name}
 
           valueFiles:
