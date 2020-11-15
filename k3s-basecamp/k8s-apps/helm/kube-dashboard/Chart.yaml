@@ -12,6 +12,14 @@ dependencies:
   version: 2.7.1
   repository: https://kubernetes.github.io/dashboard/
   alias: dashboard
+
+
+
+# https://github.com/kubernetes/dashboard
+- name: kubernetes-dashboard
+  version: 2.7.1
+  repository: https://kubernetes.github.io/dashboard/
+  alias: test
 # https://github.com/helm/charts/tree/master/stable/oauth2-proxy
 - name: oauth2-proxy
   version: 3.2.3

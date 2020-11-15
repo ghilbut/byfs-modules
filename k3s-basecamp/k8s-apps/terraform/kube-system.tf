@@ -49,14 +49,6 @@ data template_file kube_system {
             value: ${local.dashboard_host}
           - name:  dashboard.ingress.tls[0].hosts[0]
             value: ${local.dashboard_host}
-
-          - name:  oauth2-proxy.extraEnv[0].value
-            value: ${var.github_org}
-          - name:  oauth2-proxy.ingress.hosts[0]
-            value: ${local.dashboard_host}
-          - name:  oauth2-proxy.ingress.tls[0].hosts[0]
-            value: ${local.dashboard_host}
-
           valueFiles:
           - values.yaml
           version: v2
