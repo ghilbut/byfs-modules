@@ -1,6 +1,8 @@
 locals {
-  kube_dashboard_host      = "k8s.${var.domain_name}"
+  kube_dashboard_host      = "k3s.${var.domain_name}"
   kube_dashboard_namespace = "kube-dashboard"
+
+  test_dashboard_host      = "k8s.${var.domain_name}"
 }
 
 resource kubernetes_namespace kube_dashboard {
@@ -54,14 +56,19 @@ data template_file kube_dashboard {
           parameters:
           - name:  dashboard.ingress.hosts[0]
             value: ${local.kube_dashboard_host}
-          #- name:  dashboard.ingress.tls[0].hosts[0]
-          #  value: ${local.kube_dashboard_host}
+          - name:  dashboard.ingress.tls[0].hosts[0]
+            value: ${local.kube_dashboard_host}
+
+          - name:  test.ingress.hosts[0]
+            value: ${local.test_dashboard_host}
+          #- name:  test.ingress.tls[0].hosts[0]
+          #  value: ${local.test_dashboard_host}
           - name:  oauth2-proxy.extraEnv[0].value
             value: ${var.github_org}
           - name:  oauth2-proxy.ingress.hosts[0]
-            value: ${local.kube_dashboard_host}
+            value: ${local.test_dashboard_host}
           - name:  oauth2-proxy.ingress.tls[0].hosts[0]
-            value: ${local.kube_dashboard_host}
+            value: ${local.test_dashboard_host}
           valueFiles:
           - values.yaml
           version: v2

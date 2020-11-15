@@ -23,6 +23,31 @@ dashboard:
     #  - ""
     #  secretName: kubernetes-dashboard-tls
 
+
+test:
+  extraArgs:
+  #- --enable-insecure-login
+  - --enable-skip-login
+  - --disable-settings-authorizer        
+  - --auto-generate-certificates
+  ingress:
+    enabled: true
+    annotations:
+      #cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      #kubernetes.io/tls-acme: "false"
+      #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+      nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+    paths:
+    - /
+    hosts:
+    - ""
+    tls: []
+    #- hosts:
+    #  - ""
+    #  secretName: kubernetes-dashboard-tls
+
 oauth2-proxy:
   config:
     existingSecret: kube-dashboard-oauth2-secret
