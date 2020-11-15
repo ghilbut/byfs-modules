@@ -59,12 +59,20 @@ extension:
 
   imagePullSecrets: []
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: ext
 
   image:
     repository: meltwater/drone-convert-pathschanged
     pullPolicy: IfNotPresent
     tag: 0.2.0
+
+  env:
+  - name:  DRONE_DEBUG
+    value: true
+  - name:  PROVIDER
+    value: github
+
+  extraSecretNamesForEnvFrom: []
 
   podAnnotations: {}
 
