@@ -59,7 +59,7 @@ extension:
 
   imagePullSecrets: []
   nameOverride: ""
-  fullnameOverride: ext
+  fullnameOverride: ""
 
   image:
     repository: meltwater/drone-convert-pathschanged
