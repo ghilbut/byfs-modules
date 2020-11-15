@@ -23,6 +23,6 @@ dependencies:
   repository: https://charts.drone.io
   alias: secrets
 
-- name: extention
-  version: 0.1.0
-  repository: file://extension
+#- name: extention
+#  version: 0.1.0
+#  repository: file://extension
