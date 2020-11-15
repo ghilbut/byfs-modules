@@ -49,7 +49,7 @@ resource helm_release argo {
 
   set {
     name  = "server.config.url"
-    value = "http://${local.argo_host}"
+    value = "https://${local.argo_host}"
   }
 
   set {
