@@ -64,8 +64,6 @@ data template_file drone {
             value: ${var.drone_repository_filter}
           - name:  server.env.DRONE_SERVER_PROXY_HOST
             value: ${local.drone_host}
-          - name:  server.env.DRONE_CONVERT_PLUGIN_ENDPOINT
-            value: manager-drone:3000
           - name:  secrets.env.SECRET_KEY
             value: x
 

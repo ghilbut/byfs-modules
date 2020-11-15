@@ -19,15 +19,16 @@ server:
   extraSecretNamesForEnvFrom:
   - drone-server-secret
   env:
-    DRONE_DATABASE_DRIVER:    mysql
-    DRONE_LOGS_DEBUG:         "false"
-    DRONE_LOGS_TRACE:         "false"
-    DRONE_REPOSITORY_FILTER:  ""
-    DRONE_SERVER_HOST:        manager-drone-server
-    DRONE_SERVER_PROTO:       http
-    DRONE_SERVER_PROXY_HOST:  ""
-    DRONE_SERVER_PROXY_PROTO: http
-    DRONE_USER_CREATE:        username:ghilbut,admin:true
+    DRONE_DATABASE_DRIVER:         mysql
+    DRONE_LOGS_DEBUG:              "false"
+    DRONE_LOGS_TRACE:              "false"
+    DRONE_REPOSITORY_FILTER:       ""
+    DRONE_SERVER_HOST:             manager-drone-server
+    DRONE_SERVER_PROTO:            http
+    DRONE_SERVER_PROXY_HOST:       ""
+    DRONE_SERVER_PROXY_PROTO:      http
+    DRONE_USER_CREATE:             username:ghilbut,admin:true
+    DRONE_CONVERT_PLUGIN_ENDPOINT: http://manager-drone:3000
 
 runner:
   extraSecretNamesForEnvFrom:
