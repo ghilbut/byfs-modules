@@ -68,7 +68,7 @@ extension:
 
   env:
   - name:  DRONE_DEBUG
-    value: true
+    value: "true"
   - name:  PROVIDER
     value: github
 
