@@ -19,15 +19,16 @@ server:
   extraSecretNamesForEnvFrom:
   - drone-server-secret
   env:
-    DRONE_DATABASE_DRIVER:    mysql
-    DRONE_LOGS_DEBUG:         "false"
-    DRONE_LOGS_TRACE:         "false"
-    DRONE_REPOSITORY_FILTER:  ""
-    DRONE_SERVER_HOST:        manager-drone-server
-    DRONE_SERVER_PROTO:       http
-    DRONE_SERVER_PROXY_HOST:  ""
-    DRONE_SERVER_PROXY_PROTO: http
-    DRONE_USER_CREATE:        username:ghilbut,admin:true
+    DRONE_DATABASE_DRIVER:         mysql
+    DRONE_LOGS_DEBUG:              "false"
+    DRONE_LOGS_TRACE:              "false"
+    DRONE_REPOSITORY_FILTER:       ""
+    DRONE_SERVER_HOST:             manager-drone-server
+    DRONE_SERVER_PROTO:            http
+    DRONE_SERVER_PROXY_HOST:       ""
+    DRONE_SERVER_PROXY_PROTO:      http
+    DRONE_USER_CREATE:             username:ghilbut,admin:true
+    DRONE_CONVERT_PLUGIN_ENDPOINT: http://manager-drone:3000
 
 runner:
   extraSecretNamesForEnvFrom:
@@ -52,3 +53,66 @@ secrets:
     secretNamespace: manager-drone
   env:
     KUBERNETES_NAMESPACE: manager-drone
+
+
+extension:
+  replicaCount: 1
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  image:
+    repository: meltwater/drone-convert-pathschanged
+    pullPolicy: IfNotPresent
+    tag: 0.2.0
+
+  env:
+  - name:  DRONE_DEBUG
+    value: "true"
+  - name:  PROVIDER
+    value: github
+
+  extraSecretNamesForEnvFrom: []
+
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    type: ClusterIP
+    port: 3000
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

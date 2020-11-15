@@ -66,12 +66,16 @@ data template_file drone {
             value: ${local.drone_host}
           - name:  secrets.env.SECRET_KEY
             value: x
+
+          - name:  extension.extraSecretNamesForEnvFrom[0]
+            value: ${kubernetes_secret.drone_convert_plugin_secret.metadata[0].name}
+
           valueFiles:
           - values.yaml
           version: v2
       destination:
         server: https://kubernetes.default.svc
-        namespace: ${local.drone_namespace}
+        namespace: ${kubernetes_namespace.drone.metadata[0].name}
       syncPolicy:
         automated:
           prune: true
@@ -94,6 +98,12 @@ resource random_string drone_rpc_secret {
   special = false
 }
 
+resource random_string drone_convert_plugin_secret {
+  length  = 32
+  upper   = false
+  special = false
+}
+
 resource random_string drone_secrets_plugin_token {
   length  = 32
   upper   = false
@@ -101,31 +111,24 @@ resource random_string drone_secrets_plugin_token {
 }
 
 resource kubernetes_secret drone_server_secret {
-  depends_on = [
-    kubernetes_namespace.drone,
-  ]
-
   metadata {
     name      = "drone-server-secret"
-    namespace = local.drone_namespace
+    namespace = kubernetes_namespace.drone.metadata[0].name
   }
 
   data = {
-    DRONE_DATABASE_DATASOURCE  = local.drone_datasource
-    DRONE_GITHUB_CLIENT_ID     = var.drone_github_client.id
-    DRONE_GITHUB_CLIENT_SECRET = var.drone_github_client.secret
-    DRONE_RPC_SECRET           = random_string.drone_rpc_secret.result
+    DRONE_DATABASE_DATASOURCE   = local.drone_datasource
+    DRONE_GITHUB_CLIENT_ID      = var.drone_github_client.id
+    DRONE_GITHUB_CLIENT_SECRET  = var.drone_github_client.secret
+    DRONE_RPC_SECRET            = random_string.drone_rpc_secret.result
+    DRONE_CONVERT_PLUGIN_SECRET = random_string.drone_convert_plugin_secret.result
   }
 }
 
 resource kubernetes_secret drone_runner_secret {
-  depends_on = [
-    kubernetes_namespace.drone,
-  ]
-
   metadata {
     name      = "drone-runner-secret"
-    namespace = local.drone_namespace
+    namespace = kubernetes_namespace.drone.metadata[0].name
   }
 
   data = {
@@ -135,17 +138,25 @@ resource kubernetes_secret drone_runner_secret {
 }
 
 resource kubernetes_secret drone_secret_plugin_secret {
-  depends_on = [
-    kubernetes_namespace.drone,
-  ]
-
   metadata {
     name      = "drone-secrets-plugin-secret"
-    namespace = local.drone_namespace
+    namespace = kubernetes_namespace.drone.metadata[0].name
   }
 
   data = {
     SECRET_KEY = random_string.drone_secrets_plugin_token.result
+  }
+}
+
+resource kubernetes_secret drone_convert_plugin_secret {
+  metadata {
+    name      = "drone-convert-plugin-secret"
+    namespace = kubernetes_namespace.drone.metadata[0].name
+  }
+
+  data = {
+    DRONE_SECRET = random_string.drone_convert_plugin_secret.result
+    TOKEN        = var.drone_github_personal_token
   }
 }
 

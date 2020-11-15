@@ -75,7 +75,7 @@ data template_file kibana {
 
 ################################################################
 ##
-##  Kubernetes ConfigMap and Secret
+##  Kubernetes Secret
 ##
 
 resource random_string kibana_oauth2_cookie_secret {

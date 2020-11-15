@@ -5,6 +5,7 @@ server:
   ingress:
     enabled: true
     annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
     hosts:
@@ -16,6 +17,11 @@ server:
       backend:
         serviceName: manager-argo-argocd-dex-server
         servicePort: 5556
+    tls:
+    - hosts:
+      - ""
+      secretName: argo-tls
+    https: true
   config:
     url: ""
     repositories: |
@@ -28,7 +34,8 @@ server:
         config:
           clientID: $dex.github.clientID
           clientSecret: $dex.github.clientSecret
-          orgs: []
+          orgs:
+          - name: $dex.github.org
   ## https://argoproj.github.io/argo-cd/operator-manual/rbac/
   rbacConfig:
     policy.default: role:readonly

@@ -89,6 +89,10 @@ variable drone_github_client {
   type = object({ id = string, secret = string })
 }
 
+variable drone_github_personal_token {
+  type = string
+}
+
 variable drone_mysql_password {
   type = string
 }

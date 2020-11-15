@@ -24,6 +24,7 @@ argo-cd:
       - hosts:
         - ""
         secretName: argo-tls
+      https: true
     config:
       url: ""
       repositories: |
