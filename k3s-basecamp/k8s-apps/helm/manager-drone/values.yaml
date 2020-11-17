@@ -1,5 +1,12 @@
 ---
 server:
+  podAnnotations:
+    co.elastic.logs/enabled: true
+    co.elastic.logs/format: json
+    co.elastic.logs/json.add_error_key: true
+    co.elastic.logs/json.message_key: msg
+    co.elastic.logs/fileset.stdout: access
+    co.elastic.logs/fileset.stderr: error
   ingress:
     enabled: true
     annotations:
