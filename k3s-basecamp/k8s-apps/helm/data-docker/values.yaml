@@ -11,6 +11,19 @@ registry:
     bucket: ""
     encrypt: true
     secure:  true
+  configData:
+    version: 0.1
+    log:
+      accesslog:
+        disabled: true
+      level: warn
+      formatter: json
+      fields:
+        service: registry
+        environment: ops
+    storage:
+      cache:
+        blobdescriptor: inmemory
 
 oauth2-proxy:
   config:
