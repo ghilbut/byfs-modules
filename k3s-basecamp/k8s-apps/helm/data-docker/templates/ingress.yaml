@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: data-docker
@@ -14,17 +14,13 @@ spec:
       - path: /v2
         pathType: Prefix
         backend:
-          service:
-            name: registry
-            port:
-              number: 5000
+          serviceName: registry
+          servicePort: 5000
       - path: /
         pathType: Prefix
         backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 4180
+          serviceName: oauth2-proxy
+          servicePort: 4180
   tls:
   - hosts:
       - {{ .Values.host }}
