@@ -25,3 +25,7 @@ spec:
             name: oauth2-proxy
             port:
               number: 4180
+  tls:
+  - hosts:
+      - {{ .Values.host }}
+    secretName: data-docker-tls
