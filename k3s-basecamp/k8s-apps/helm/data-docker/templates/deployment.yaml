@@ -23,4 +23,4 @@ spec:
         - name:  REGISTRY_NAME
           value: private docker registry
         - name:  REGISTRY_URL
-          value: http://data-docker-registry.data-docker.svc.cluster.local:5000
+          value: http://registry.data-docker.svc.cluster.local:5000/v2

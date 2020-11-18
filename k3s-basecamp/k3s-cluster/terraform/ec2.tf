@@ -63,8 +63,8 @@ resource aws_iam_role basecamp {
   }, local.tags)
 }
 
-resource aws_iam_role_policy ebs_access {
-  name   = "k3s-basecamp"
+resource aws_iam_role_policy ebs {
+  name   = "k3s-basecamp-ebs"
   role   = aws_iam_role.basecamp.id
   policy = <<-EOF
   {
@@ -95,6 +95,36 @@ resource aws_iam_role_policy ebs_access {
         ],
         "Effect": "Allow",
         "Resource": ["*"]
+      }
+    ]
+  }
+  EOF
+}
+
+resource aws_iam_role_policy route53 {
+  name   = "k3s-basecamp-route53"
+  role   = aws_iam_role.basecamp.id
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "route53:GetChange",
+        "Effect": "Allow",
+        "Resource": "arn:aws:route53:::change/*"
+      },
+      {
+        "Action": [
+          "route53:ChangeResourceRecordSets",
+          "route53:ListResourceRecordSets"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:route53:::hostedzone/*"
+      },
+      {
+        "Action": "route53:ListHostedZonesByName",
+        "Effect": "Allow",
+        "Resource": "*"
       }
     ]
   }

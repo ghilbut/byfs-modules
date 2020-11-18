@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: data-docker
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: {{ .Values.host }}
+    http:
+      paths:
+      - path: /v2
+        pathType: Prefix
+        backend:
+          serviceName: registry
+          servicePort: 5000
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: oauth2-proxy
+          servicePort: 4180
+          #serviceName: registry-web
+          #servicePort: 8080
+  tls:
+  - hosts:
+      - {{ .Values.host }}
+    secretName: data-docker-tls

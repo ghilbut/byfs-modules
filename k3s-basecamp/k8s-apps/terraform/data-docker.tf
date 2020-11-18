@@ -50,6 +50,8 @@ data template_file docker {
         path: k3s-basecamp/k8s-apps/helm/data-docker
         helm:
           parameters:
+          - name:  host
+            value: docker.${var.domain_name}
           - name:  registry.secrets.s3.accessKey
             value: ${var.docker_registry_access_key}
           - name:  registry.secrets.s3.secretKey
@@ -60,12 +62,8 @@ data template_file docker {
             value: ${var.aws_s3_endpoint}
           - name:  registry.s3.bucket
             value: ${var.docker_registry_s3_bucket}
-          - name:  oauth2-poxy.extraEnv[0].value
+          - name:  oauth2-proxy.extraEnv[0].value
             value: "${var.github_org}"
-          - name:  oauth2-proxy.ingress.hosts[0]
-            value: docker.${var.domain_name}
-          - name:  oauth2-proxy.ingress.tls[0].hosts[0]
-            value: docker.${var.domain_name}
           valueFiles:
           - values.yaml
           version: v2
