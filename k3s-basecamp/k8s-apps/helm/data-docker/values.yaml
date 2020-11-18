@@ -1,4 +1,6 @@
 ---
+host: ""
+
 registry:
   fullnameOverride: registry
   storage: s3
@@ -44,14 +46,15 @@ oauth2-proxy:
   service:
     port: 8080
   ingress:
-    enabled: true
-    hosts:
-    - ""
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
-      kubernetes.io/ingress.class: nginx
-      # nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    tls:
-    - secretName: docker-registry-web-oauth2-proxy-tls
-      hosts:
-      - ""
+    enabled: false
+  #  enabled: true
+  #  hosts:
+  #  - ""
+  #  annotations:
+  #    cert-manager.io/cluster-issuer: letsencrypt
+  #    kubernetes.io/ingress.class: nginx
+  #    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  #  tls:
+  #  - secretName: docker-registry-web-oauth2-proxy-tls
+  #    hosts:
+  #    - ""
