@@ -43,8 +43,8 @@ oauth2-proxy:
   extraEnv:
   - name:  OAUTH2_PROXY_GITHUB_ORG
     value: ""
-  #service:
-  #  port: 8080
+  service:
+    port: 4180
   #ingress:
   #  enabled: true
   #  hosts:
