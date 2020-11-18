@@ -27,6 +27,7 @@ registry:
         blobdescriptor: inmemory
 
 oauth2-proxy:
+  fullnameOverride: oauth2-proxy
   config:
     existingSecret: docker-registry-web-oauth2-secret
     # https://oauth2-proxy.github.io/oauth2-proxy/configuration#config-file
