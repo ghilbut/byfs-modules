@@ -20,8 +20,9 @@ spec:
         pathType: Prefix
         backend:
           #serviceName: oauth2-proxy
+          #servicePort: 4180
           serviceName: registry-web
-          servicePort: 4180
+          servicePort: 8080
   tls:
   - hosts:
       - {{ .Values.host }}
