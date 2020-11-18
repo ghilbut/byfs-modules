@@ -19,7 +19,8 @@ spec:
       - path: /
         pathType: Prefix
         backend:
-          serviceName: oauth2-proxy
+          #serviceName: oauth2-proxy
+          serviceName: registry-web
           servicePort: 4180
   tls:
   - hosts:
