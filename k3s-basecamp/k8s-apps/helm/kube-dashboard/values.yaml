@@ -73,3 +73,8 @@ oauth2-proxy:
     - secretName: kubernetes-test-dashboard-tls
       hosts:
       - ""
+  podAnnotations:
+    co.elastic.logs/enabled: "true"
+    co.elastic.logs/fileset.stdout: access
+    co.elastic.logs/fileset.stderr: error
+    co.elastic.logs/exclude_lines: '[ "GET - \"/ping\"" ]'
