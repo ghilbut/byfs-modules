@@ -7,6 +7,11 @@ influxdb:
     enabled: true
     user:
       existingSecret: influxdb-auth-secret
+  podAnnotations:
+    co.elastic.logs/enabled: "true"
+    co.elastic.logs/fileset.stdout: access
+    co.elastic.logs/fileset.stderr: error
+    co.elastic.logs/exclude_lines: '[ "GET /ping" ]'
   ingress:
     enabled: true
     hostname: ""
