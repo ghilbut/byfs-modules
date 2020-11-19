@@ -53,15 +53,8 @@ oauth2-proxy:
     value: ""
   service:
     port: 4180
-  #ingress:
-  #  enabled: true
-  #  hosts:
-  #  - ""
-  #  annotations:
-  #    cert-manager.io/cluster-issuer: letsencrypt
-  #    kubernetes.io/ingress.class: nginx
-  #    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  #  tls:
-  #  - secretName: docker-registry-web-oauth2-proxy-tls
-  #    hosts:
-  #    - ""
+  podAnnotations:
+    co.elastic.logs/enabled: "true"
+    co.elastic.logs/fileset.stdout: access
+    co.elastic.logs/fileset.stderr: error
+    co.elastic.logs/exclude_lines: [ "GET - \"\/ping\"" ]
