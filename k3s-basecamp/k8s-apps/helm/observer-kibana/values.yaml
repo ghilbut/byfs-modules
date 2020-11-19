@@ -17,15 +17,17 @@ kibana:
     limits:
       cpu: "1000m"
       memory: "2Gi"
+  fullnameOverride: kibana
 
 oauth2-proxy:
+  fullnameOverride: oauth2-proxy
   config:
     existingSecret: kibana-oauth2-secret
     # https://oauth2-proxy.github.io/oauth2-proxy/configuration#config-file
     # https://github.com/oauth2-proxy/oauth2-proxy/blob/master/contrib/oauth2-proxy.cfg.example
     configFile: |-
       email_domains = [ "*" ]
-      upstreams = [ "http://observer-kibana-kibana:5601" ]
+      upstreams = [ "http://kibana:5601" ]
       provider = "github"
   image:
     tag: v6.1.1
