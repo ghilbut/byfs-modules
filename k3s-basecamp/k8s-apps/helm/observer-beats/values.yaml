@@ -67,7 +67,7 @@ logstash:
       }
       filter {
         mutate {
-          remove_field => [ "container", "kafka" ]
+          remove_field => [ "agent", "container", "kafka" ]
         }
       }
       output {
