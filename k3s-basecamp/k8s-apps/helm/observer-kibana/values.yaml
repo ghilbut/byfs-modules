@@ -17,6 +17,8 @@ kibana:
     limits:
       cpu: "1000m"
       memory: "2Gi"
+  readinessProbe:
+    initialDelaySeconds: 180
   fullnameOverride: kibana
 
 oauth2-proxy:
