@@ -1,6 +1,15 @@
 ---
 kibana:
   elasticsearchHosts: "http://elasticsearch.data-elastic.svc:9200"
+  podAnnotations:
+    co.elastic.logs/enabled: "true"
+    co.elastic.logs/format: json
+    co.elastic.logs/json.add_error_key: "true"
+    co.elastic.logs/json.keys_under_root: "true"
+    co.elastic.logs/json.message_key: message
+    co.elastic.logs/fileset.stdout: access
+    co.elastic.logs/fileset.stderr: error
+    co.elastic.logs/exclude_lines: '[ "^GET /app/kibana 200" ]'
   resources:
     requests:
       cpu: "1000m"
