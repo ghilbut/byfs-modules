@@ -52,4 +52,4 @@ oauth2-proxy:
     co.elastic.logs/enabled: "true"
     co.elastic.logs/fileset.stdout: access
     co.elastic.logs/fileset.stderr: error
-    co.elastic.logs/exclude_lines: '[ "GET - \"/ping\"" ]'
+    #co.elastic.logs/exclude_lines: '[ "GET - \"/ping\"" ]'
