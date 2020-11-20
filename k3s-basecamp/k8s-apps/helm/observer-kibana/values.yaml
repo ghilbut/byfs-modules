@@ -9,7 +9,7 @@ kibana:
     co.elastic.logs/json.message_key: message
     co.elastic.logs/fileset.stdout: access
     co.elastic.logs/fileset.stderr: error
-    co.elastic.logs/exclude_lines: '[ "^GET\s/app/kibana\s200" ]'
+    co.elastic.logs/exclude_lines: '^GET\s/app/kibana\s200'
   resources:
     requests:
       cpu: "1000m"
