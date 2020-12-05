@@ -51,10 +51,11 @@ runner:
     DRONE_RPC_HOST:               manager-drone-server
     DRONE_RPC_PROTO:              http
     DRONE_RUNNER_CAPACITY:        "4"
-    DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
+    DRONE_SECRET_PLUGIN_ENDPOINT: http://secrets:3000
     DRONE_TRACE:                  "false"
 
 secrets:
+  fullnameOverride: secrets
   extraSecretNamesForEnvFrom:
   - drone-secrets-plugin-secret
   rbac:
