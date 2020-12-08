@@ -22,7 +22,7 @@ dependencies:
   version: 1.5.1
   repository: https://helm.goharbor.io
 
-# https://github.com/dexidp/helm-charts
-- name: dex
-  version: 2.15.0
-  repository: https://charts.dexidp.io
+## https://github.com/dexidp/helm-charts
+#- name: dex
+#  version: 2.15.0
+#  repository: https://charts.dexidp.io
