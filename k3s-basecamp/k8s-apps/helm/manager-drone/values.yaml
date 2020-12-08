@@ -1,5 +1,6 @@
 ---
 server:
+  fullnameOverride: server
   podAnnotations:
     co.elastic.logs/enabled: "true"
     co.elastic.logs/format: json
@@ -31,14 +32,15 @@ server:
     DRONE_LOGS_DEBUG:              "false"
     DRONE_LOGS_TRACE:              "false"
     DRONE_REPOSITORY_FILTER:       ""
-    DRONE_SERVER_HOST:             manager-drone-server
+    DRONE_SERVER_HOST:             server
     DRONE_SERVER_PROTO:            http
     DRONE_SERVER_PROXY_HOST:       ""
     DRONE_SERVER_PROXY_PROTO:      http
     DRONE_USER_CREATE:             username:ghilbut,admin:true
-    DRONE_CONVERT_PLUGIN_ENDPOINT: http://manager-drone:3000
+    DRONE_CONVERT_PLUGIN_ENDPOINT: http://converter:3000
 
 runner:
+  fullnameOverride: runner
   extraSecretNamesForEnvFrom:
   - drone-runner-secret
   rbac:
@@ -46,15 +48,16 @@ runner:
     - manager-drone
   env:
     DRONE_DEBUG:                  "false"
-    DRONE_HTTP_HOST:              manager-drone-runner
+    DRONE_HTTP_HOST:              runner
     DRONE_NAMESPACE_DEFAULT:      manager-drone
-    DRONE_RPC_HOST:               manager-drone-server
+    DRONE_RPC_HOST:               server
     DRONE_RPC_PROTO:              http
     DRONE_RUNNER_CAPACITY:        "4"
-    DRONE_SECRET_PLUGIN_ENDPOINT: http://drone-kubernetes-secrets:3000
+    DRONE_SECRET_PLUGIN_ENDPOINT: http://secrets:3000
     DRONE_TRACE:                  "false"
 
 secrets:
+  fullnameOverride: secrets
   extraSecretNamesForEnvFrom:
   - drone-secrets-plugin-secret
   rbac:
@@ -68,7 +71,7 @@ extension:
 
   imagePullSecrets: []
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: converter
 
   image:
     repository: meltwater/drone-convert-pathschanged
