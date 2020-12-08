@@ -78,7 +78,7 @@ harbor:
     enabled: false
   core:
     secret: "not-a-secure-key"
-  jobservice
+  jobservice:
     secret: "not-a-secure-key"
   registry:
     secret: "not-a-secure-key"
