@@ -58,3 +58,49 @@ oauth2-proxy:
     co.elastic.logs/fileset.stdout: access
     co.elastic.logs/fileset.stderr: error
     co.elastic.logs/exclude_lines: '[ "GET - \"/ping\"" ]'
+
+
+
+harbor:
+  fullnameOverride: harbor
+  expose:
+    tls:
+      certSource: auto
+    secret:
+      secretName: expose-core-tls-secret
+      notarySecretName: expose-notary-tls-secret
+    ingress:
+      hosts:
+        core: harbor.ghilbut.net
+        notary: notary.ghilbut.net
+  externalURL: https://harbor.ghilbut.net
+  persistence:
+    enabled: false
+  core:
+    secret: "not-a-secure-key"
+  jobservice
+    secret: "not-a-secure-key"
+  registry:
+    secret: "not-a-secure-key"
+
+
+
+
+dex:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    path: /
+    hosts:
+    - dex.ghilbut.net
+    tls: []
+  config:
+  - type: github
+    id: github
+    name: GitHub
+    config:
+      clientID: xxxxxxxxxxxxxxx
+      clientSecret: yyyyyyyyyyyyyyyyyyyyy
+      redirectURI: https://dex.ghilbut.net/callback
+      org: tesseledger
