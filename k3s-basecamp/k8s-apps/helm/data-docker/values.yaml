@@ -75,6 +75,13 @@ harbor:
   externalURL: https://harbor.ghilbut.net
   persistence:
     enabled: false
+    imageChartStorage:
+      type: s3
+      s3:
+        region: ap-northeast-2
+        bucket: ghilbut-docker-registry
+        encrypt: true
+        rootdirectory: harbor/
   core:
     secret: "not-a-secure-key"
   jobservice:
