@@ -62,7 +62,7 @@ oauth2-proxy:
 
 
 harbor:
-  nameOverride: harbor
+  nameOverride: x
   expose:
     tls:
       certSource: secret
