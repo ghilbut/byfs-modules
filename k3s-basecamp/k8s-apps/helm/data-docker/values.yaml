@@ -66,9 +66,9 @@ harbor:
   expose:
     tls:
       certSource: secret
-    secret:
-      secretName: expose-core-tls-secret
-      notarySecretName: expose-notary-tls-secret
+      secret:
+        secretName: expose-core-tls-secret
+        notarySecretName: expose-notary-tls-secret
     ingress:
       hosts:
         core: harbor.ghilbut.net
