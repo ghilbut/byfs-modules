@@ -76,12 +76,29 @@ harbor:
   externalURL: https://harbor.ghilbut.net
   persistence:
     enabled: false
+  portal:
+    fullnameoverride: portal
   core:
+    fullnameoverride: core
     secret: "not-a-secure-key"
   jobservice:
     secret: "not-a-secure-key"
+    fullnameoverride: jobservice
   registry:
+    fullnameoverride: registry
     secret: "not-a-secure-key"
+  chartmuseum:
+    fullnameoverride: chartmuseum
+  clair:
+    fullnameoverride: clair
+  trivy:
+    fullnameoverride: trivy
+  notary:
+    fullnameOverride: notary
+  database:
+    fullnameOverride: database
+  redis:
+    fullnameOverride: redis
 
 
 
