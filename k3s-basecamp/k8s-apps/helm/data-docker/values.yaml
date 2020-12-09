@@ -65,7 +65,7 @@ harbor:
   fullnameOverride: harbor
   expose:
     tls:
-      certSource: auto
+      certSource: secret
     secret:
       secretName: expose-core-tls-secret
       notarySecretName: expose-notary-tls-secret
