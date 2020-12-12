@@ -91,7 +91,7 @@ logstash:
           elasticsearch {
             hosts => "elasticsearch.data-elastic.svc.cluster.local"
             manage_template => false
-            index => "%{[@metadata][kubernetes][namespace]}-%{+YYYY.MM.dd}"
+            index => "%{[kubernetes][namespace]}-%{+YYYY.MM.dd}"
             timeout => 60
           }
         }
