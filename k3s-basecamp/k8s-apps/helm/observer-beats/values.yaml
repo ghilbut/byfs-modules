@@ -87,4 +87,12 @@ logstash:
             timeout => 60
           }
         }
+        if [@metadata][kafka][topic] == "filebeat" {
+          elasticsearch {
+            hosts => "elasticsearch.data-elastic.svc.cluster.local"
+            manage_template => false
+            index => "%{[@metadata][kubernetes][namespace]}-%{+YYYY.MM.dd}"
+            timeout => 60
+          }
+        }
       }
