@@ -76,7 +76,7 @@ extension:
   image:
     repository: meltwater/drone-convert-pathschanged
     pullPolicy: IfNotPresent
-    tag: 0.2.0
+    tag: 0.3.0
 
   env:
   - name:  DRONE_DEBUG
