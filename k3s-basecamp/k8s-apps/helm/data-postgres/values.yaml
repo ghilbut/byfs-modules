@@ -1,0 +1,10 @@
+postgresql:
+  fullnameOverride: postgres
+  postgresqlUsername: db
+  existingSecret: postgres-passwords-secret
+  postgresqlDatabase: drone
+  primary:
+    tolerations:
+    - type: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
