@@ -8,7 +8,7 @@ dex:
     - secretRef:
         name: github-client
 
-    connectors: []
+    #connectors:
     #- type: github
     #  id:   github
     #  name: Github
