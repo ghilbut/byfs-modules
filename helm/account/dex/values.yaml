@@ -12,7 +12,7 @@ dex:
     - type: github
       id: github
       name: Github
-      config:
+      config: |
         clientID: $GITHUB_CLIENT_ID
         clientSecret: $GITHUB_CLIENT_SECRET
         redirectURI: https://dex.ghilbut.net/dex/callback
