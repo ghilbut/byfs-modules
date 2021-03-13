@@ -2,9 +2,7 @@ dex:
   config:
     issuer: https://dex.ghilbut.net/dex
     storage:
-      type: sqlite3
-      config:
-        file: examples/dex.db 
+      type: memory
     connectors:
     - type: github
       id:   github
