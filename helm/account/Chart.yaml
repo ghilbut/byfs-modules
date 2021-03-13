@@ -1,0 +1,13 @@
+apiVersion: v2
+name: dex
+description: A Helm chart for Dex
+type: application
+version: 0.1.0
+appVersion: 1.16.0
+
+dependencies:
+# https://github.com/dexidp/helm-charts
+- name: dex
+  version: 0.0.6
+  repository: https://charts.dexidp.io/
+
