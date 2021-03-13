@@ -3,21 +3,20 @@ dex:
     issuer: https://dex.ghilbut.net
     storage: memory
     enablePasswordDB: true
+    connectors:
+    - type: github
+      id:   github
+      name: Github
+      config:
+        clientID: $GITHUB_CLIENT_ID
+        clientSecret: $GITHUB_CLIENT_SECRET
+        redirectURI: "https://dex.ghilbut.net/dex/callback"
+        orgs:
+        - name: tesseledger
 
-    envFrom:
-    - secretRef:
-        name: github-client
-
-    #connectors:
-    #- type: github
-    #  id:   github
-    #  name: Github
-    #  config:
-    #    clientID: $GITHUB_CLIENT_ID
-    #    clientSecret: $GITHUB_CLIENT_SECRET
-    #    redirectURI: "https://dex.ghilbut.net/dex/callback"
-    #    orgs:
-    #    - name: tesseledger
+  envFrom:
+  - secretRef:
+      name: github-client
 
   ingress:
     enable: true
