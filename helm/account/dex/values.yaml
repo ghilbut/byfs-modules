@@ -1,7 +1,7 @@
 dex:
-  #config:
-  #  issuer: https://dex.ghilbut.net
-  #  storage: memory
+  config:
+    issuer: https://dex.ghilbut.net
+    storage: memory
   #  enablePasswordDB: true
   #  connectors:
   #  - type: github
