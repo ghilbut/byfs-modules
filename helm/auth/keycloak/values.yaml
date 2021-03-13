@@ -1,0 +1,15 @@
+keycloak:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    rules:
+    - host: keycloak.ghilbut.net
+      paths:
+      - /
+    tls:
+    - hosts:
+      - keycloak.ghilbut.net
+      secretName: keycloak-tls
