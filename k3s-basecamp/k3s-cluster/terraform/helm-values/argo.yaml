@@ -25,7 +25,7 @@ server:
   config:
     url: ""
     repositories: |
-      - url: https://github.com/ghilbut/byfx-modules.git
+      - url: https://github.com/ghilbut/byfs-modules.git
     dex.config: |
       connectors:
       - type: github
