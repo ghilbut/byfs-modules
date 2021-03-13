@@ -14,7 +14,7 @@ dex:
         clientSecret: $GITHUB_CLIENT_SECRET
         redirectURI: "https://dex.ghilbut.net/dex/callback"
         orgs:
-       - name: tesseledger
+        - name: tesseledger
     enablePasswordDB: true
 
   envFrom:
