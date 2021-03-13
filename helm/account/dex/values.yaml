@@ -8,16 +8,16 @@ dex:
     - secretRef:
         name: github-client
 
-    connectors:
-    - type: github
-      id:   github
-      name: Github
-      config:
-        clientID: $GITHUB_CLIENT_ID
-        clientSecret: $GITHUB_CLIENT_SECRET
-        redirectURI: "https://dex.ghilbut.net/dex/callback"
-        orgs:
-        - name: tesseledger
+    connectors: []
+    #- type: github
+    #  id:   github
+    #  name: Github
+    #  config:
+    #    clientID: $GITHUB_CLIENT_ID
+    #    clientSecret: $GITHUB_CLIENT_SECRET
+    #    redirectURI: "https://dex.ghilbut.net/dex/callback"
+    #    orgs:
+    #    - name: tesseledger
 
   ingress:
     enable: true
