@@ -17,7 +17,7 @@ dex:
         clientSecret: $GITHUB_CLIENT_SECRET
         redirectURI: "https://dex.ghilbut.net/dex/callback"
         orgs:
-        - tesseledger
+        - name: tesseledger
 
   ingress:
     enable: true
