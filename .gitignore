@@ -39,3 +39,6 @@ override.tf.json
 # helm
 k3s-basecamp/helm/**/Chart.lock
 k3s-basecamp/helm/**/charts
+
+# test with argo
+.argo
