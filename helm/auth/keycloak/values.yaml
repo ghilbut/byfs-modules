@@ -8,3 +8,6 @@ keycloak:
       kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     tls: true
+
+  postgresql:
+    enabled: false
