@@ -22,7 +22,9 @@ dex:
   ingress:
     enable: true
     annotations:
-      cert-manager.io/cluster-issuer: acme
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
     hosts:
     - host: dex.ghilbut.net
       paths:
