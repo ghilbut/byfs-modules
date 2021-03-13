@@ -20,7 +20,7 @@ dex:
       name: github-client
 
   ingress:
-    enable: true
+    enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt
       kubernetes.io/ingress.class: nginx
